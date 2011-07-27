@@ -1,0 +1,18 @@
+﻿@using umbraco.MacroEngines;
+@using UmbracoLabs;
+@using UmbracoLabs.Web.Helpers;
+
+@inherits umbraco.MacroEngines.DynamicNodeContext
+
+@{
+	var cssClassAttribute = WebHelper.CreateAttributeMarkup("class", Parameter.cssClassText);
+	var cmsItems = Model.Children.Where("navigationHide == false");
+}
+
+@if(cmsItems.Count() > 0) {
+<ul @cssClassAttribute>
+	@foreach(var cmsItem in cmsItems) {
+		<li><a href="@CmsHelper.GetUrl(cmsItem)">@cmsItem.Name</a></li>
+	}
+</ul>
+}

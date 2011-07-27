@@ -1,0 +1,87 @@
+﻿<%@ master language="C#" masterpagefile="~/umbraco/masterpages/default.master" autoeventwireup="true" codebehind="Barebone.master.cs" inherits="UmbracoLabs.Web.Templates.Barebone" %>
+<asp:content contentplaceholderid="ContentPlaceHolderDefault" runat="server">
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head runat="server"> 
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+	<!--[if ie]><meta http-equiv="X-UA-Compatible" content="chrome=1"><![endif]-->
+	<umbraco:item field="htmlMetaDescription" inserttextbefore='<meta name="description" content="' inserttextafter='"/>' runat="server"/>
+	<umbraco:item field="htmlMetaKeywords" inserttextbefore='<meta name="keywords" content="' inserttextafter='"/>' runat="server"/>
+	<meta name="author" content="William Chang"/>
+	<title><asp:placeholder id="plhTitleInterior" runat="server"><umbraco:item  field="nameLongText" useifempty="pageName" runat="server"/><umbraco:item field="siteName" insertTextBefore=" - " recursive="true" runat="server"/></asp:placeholder><asp:placeholder id="plhTitleHome" visible="false" runat="server"><umbraco:item field="siteName" recursive="true" runat="server"/></asp:placeholder></title>
+	<!-- BEGIN: Styles -->
+	<style type="text/css" media="all">
+		#region_header {background-color:#eee;}
+		#region_middle {}
+		#region_footer {background-color:#eee;}
+
+		#region_middle .item {padding:10px 0;}
+
+		.error_field {border:solid 2px #c24949;background-color:#ffbcbc;color:#000;}
+	</style>
+	<!-- END: Styles -->
+	<!-- BEGIN: Scripts -->
+	<asp:literal id="litScriptGlobalHtml" enableviewstate="false" runat="server"/>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
+	<!-- END: Scripts -->
+	<!-- BEGIN: Page Specific -->
+	<asp:contentplaceholder id="HtmlHead" runat="server"/>
+	<!-- END: Page Specific -->
+</head>
+<body id="body" clientidmode="static" runat="server">
+<form id="form1" clientidmode="static" runat="server">
+
+<div id="region_special_top">
+<!-- BEGIN: Template Region Special Top -->
+	<asp:contentplaceholder id="RegionSpecialTop" runat="server"/>
+<!-- END: Template Region Special Top -->
+</div>
+
+<div id="frame">
+	<div id="region_column"><div id="region_column_buffer">
+		<div id="region_header">
+<!-- BEGIN: Region Header -->
+			<h1><a href="/"><umbraco:item field="siteName" recursive="true" runat="server"/></a></h1>
+			<div class="navigation_gutter1"><umbraco:macro alias="WidgetNavigation" internallink="[$globalHeaderNavigationGutter1]" runat="server"/></div>
+			<div class="navigation1"><umbraco:macro alias="WidgetNavigation" internallink="[$globalHeaderNavigation1]" runat="server"/></div>
+			<div class="navigation2"><umbraco:macro alias="WidgetNavigation" internallink="[$globalHeaderNavigation2]" runat="server"/></div>
+<!-- END: Region Header -->
+		</div>
+		<div id="region_middle">
+<!-- BEGIN: Template Region Middle -->
+			<asp:contentplaceholder id="RegionMiddle" runat="server"/>
+<!-- END: Template Region Middle -->
+		</div>
+		<div id="region_bottom">
+<!-- BEGIN: Template Region Bottom -->
+			<asp:contentplaceholder id="RegionBottom" runat="server"/>
+<!-- END: Template Region Bottom -->
+		</div>
+		<div id="region_footer">
+<!-- BEGIN: Template Region Footer -->
+			<div class="navigation1"><umbraco:macro alias="WidgetNavigation" internallink="[$globalFooterNavigation1]" runat="server"/></div>
+<!-- END: Template Region Footer -->
+		</div>
+	</div></div>
+</div>
+
+<div id="region_special_bottom">
+<!-- BEGIN: Template Region Special Bottom -->
+	<asp:contentplaceholder id="RegionSpecialBottom" runat="server"/>
+<!-- END: Template Region Special Bottom -->
+</div>
+
+</form>
+<!-- BEGIN: Scripts -->
+	<script type="text/javascript">
+	//<![CDATA[
+// Register ready event to be executed when the DOM document has finished loading.
+jQuery(document).ready(function($) {
+	// Do something.
+});
+	//]]>
+	</script>
+<!-- END: Scripts -->
+</body>
+</html>
+</asp:content>

@@ -1,0 +1,9 @@
+﻿<%@ master language="C#" masterpagefile="~/masterpages/Barebone.master" autoeventwireup="true" codebehind="BareboneHome.master.cs" inherits="UmbracoLabs.Web.Templates.BareboneHome" %>
+<%@ mastertype virtualpath="~/masterpages/Barebone.master" %>
+<asp:content contentplaceholderid="RegionMiddle" runat="server">
+<umbraco:item field="bodyText" inserttextbefore='<div class="content_body">' inserttextafter='</div>' runat="server"/>
+
+<div class="sitemap" style="display:none;margin:8px 0;padding:8px 0;background-color:#ddd;">
+	<umbraco:macro alias="WidgetSitemap" headertext="Sitemap" runat="server"/>
+</div>
+</asp:content>

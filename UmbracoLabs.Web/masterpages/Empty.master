@@ -1,0 +1,6 @@
+﻿<%@ master language="C#" masterpagefile="~/umbraco/masterpages/default.master" autoeventwireup="true" codebehind="Empty.master.cs" inherits="UmbracoLabs.Web.Templates.Empty" %>
+<asp:content contentplaceholderid="ContentPlaceHolderDefault" runat="server">
+<!--
+Silence is golden.
+-->
+</asp:content>

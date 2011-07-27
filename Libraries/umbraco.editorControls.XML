@@ -1,0 +1,927 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>umbraco.editorControls</name>
+    </assembly>
+    <members>
+        <member name="T:umbraco.editorControls.BaseTreePickerEditor">
+            <summary>
+            A base tree picker class that has all of the functionality built in for an IDataEditor
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.colorPicker">
+            <summary>
+            Summary description for colorPicker.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.colorpicker.ColorPickerDataType">
+            <summary>
+            Summary description for ColorPickerDataType.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.datefieldmultiple.DataTypeDatefieldMultiple">
+            <summary>
+            Summary description for DataTypeDatefieldMultiple.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.datepicker.DateDataType">
+            <summary>
+            Summary description for DateDataType.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.datepicker.DateData">
+            <summary>
+            Summary description for DateData.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.dateField">
+            <summary>
+            Summary description for dateField.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.DefaultDataKeyValue">
+            <summary>
+            Summary description for cms.businesslogic.datatype.DefaultDataKeyValue.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.DefaultDataKeyValue.ToXMl(System.Xml.XmlDocument)">
+            <summary>
+            Ov
+            </summary>
+            <param name="d"></param>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.editorControls.DefaultPrevalueEditor.#ctor(umbraco.cms.businesslogic.datatype.BaseDataType,System.Boolean)">
+            <summary>
+            The default editor for editing the build-in pre values in umbraco
+            </summary>
+            <param name="DataType">The DataType to be parsed</param>
+            <param name="DisplayTextBox">Whether to use the default text box</param>
+        </member>
+        <member name="M:umbraco.editorControls.DefaultPrevalueEditor.#ctor(umbraco.editorControls.BaseDataType,System.Boolean)">
+            <summary>
+            For backwards compatibility, should be replaced in your extension with the constructor that
+            uses the BaseDataType from the cms.businesslogic.datatype namespace
+            </summary>
+            <param name="DataType">The DataType to be parsed (note: the BaseDataType from editorControls is obsolete)</param>
+            <param name="DisplayTextBox">Whether to use the default text box</param>
+        </member>
+        <member name="T:umbraco.editorControls.dictionaryPicker.dictionaryPicker">
+            <summary>
+            Summary description for dictionaryPicker.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.dictionaryPicker.dictionaryPickerDataType">
+            <summary>
+            Summary description for dictionaryPickerDataType.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.dropdownlist.DropdownListDataType">
+            <summary>
+            Summary description for ColorPickerDataType.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.dropdownlist.DropdownListKeysDataType">
+            <summary>
+            Summary description for ColorPickerDataType.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.folderbrowser.DataTypeFolderBrowser">
+            <summary>
+            Summary description for DataTypeFolderbrowser.
+            </summary>
+            <summary>
+            Summary description for DataTypeUploadField.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.folderBrowser">
+            <summary>
+            Summary description for folderBrowser.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.imagecropper.DataEditor.Save">
+            <summary>
+            Store data as string XML (overridden by ToXMl to store "real" XML
+            XML format:
+            <crops dateStamp="">
+                <crop name="" x="" y="" x2="" y2="" url="" />
+            </crops>
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.imagecropper.PrevalueEditor.Save">
+            <summary>
+            Serialize configuration to:
+            uploadPropertyAlias,generateImages,showLabel|presetTemplateName,targetWidth,targetHeight,keepAspect;
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.imagecropper.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.imagecropper.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.imagecropper.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.imagecropper.Resources.imageCropperScript">
+             <summary>
+               Looks up a localized string similar to function initImageCropper(imageId, jsonId, rawId) {
+              $(function() {
+                $(&apos;.header a&apos;).click(function() {
+                  initJcrop(imageId, jsonId, rawId); // if other tab
+                });
+                $(&apos;#&apos; + imageId).ready(function() {
+                  setTimeout(&apos;initJcrop(&quot;&apos; + imageId + &apos;&quot;,&quot;&apos; + jsonId + &apos;&quot;,&quot;&apos; + rawId + &apos;&quot;)&apos;,100); 
+                  //initJcrop(imageId, jsonId, rawId); // if first tab
+                });
+              });
+            }
+            
+            function initJcrop(imageId, jsonId, rawId) {
+            
+              if ($(&apos;#&apos; + imageId).height() &gt; 0) {
+                if ($(&apos;.img&apos; + imageId + &apos;.ic-cr [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:umbraco.editorControls.imagecropper.Resources.jCropCSS" -->
+        <member name="P:umbraco.editorControls.imagecropper.Resources.jCropScript">
+            <summary>
+              Looks up a localized string similar to /**
+            * jquery.Jcrop.js v0.9.8
+            * jQuery Image Cropping Plugin
+            * @author Kelly Hallman &lt;khallman@gmail.com&gt;
+            * Copyright (c) 2008-2009 Kelly Hallman - released under MIT License {{{
+            *
+            * Permission is hereby granted, free of charge, to any person
+            * obtaining a copy of this software and associated documentation
+            * files (the &quot;Software&quot;), to deal in the Software without
+            * restriction, including without limitation the rights to use,
+            * copy, modify, merge, publish, distribute, sublicense, and/or s [rest of string was truncated]&quot;;.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.imagecropper.Resources.json2Script">
+             <summary>
+               Looks up a localized string similar to /*
+                http://www.JSON.org/json2.js
+                2008-11-19
+            
+                Public Domain.
+            
+                NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+            
+                See http://www.JSON.org/js.html
+            
+                This file creates a global JSON object containing two methods: stringify
+                and parse.
+            
+                    JSON.stringify(value, replacer, space)
+                        value       any JavaScript value, usually an object or array.
+            
+                        replacer    an optional parameter that determines how object
+                                    values are st [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="T:umbraco.editorControls.KeyValuePrevalueEditor">
+            <summary>
+            Summary description for KeyValuePrevalueEditor.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.label.DataTypeNoEdit">
+            <summary>
+            Summary description for DataTypeNoEdit.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.dropdownMultiple">
+            <summary>
+            Summary description for dropdownMultiple.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.listbox.ListBoxDataType">
+            <summary>
+            Summary description for ColorPickerDataType.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.listbox.ListBoxKeysDataType">
+            <summary>
+            Summary description for ColorPickerDataType.
+            </summary>
+        </member>
+        <member name="F:umbraco.editorControls.macrocontainer.MacroControlFactory._macroControlTypes">
+            <summary>
+            All Possible Macro types
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.macrocontainer.MacroControlFactory.GetMacroRenderControlByType(umbraco.editorControls.macrocontainer.PersistableMacroProperty,System.String)">
+            <summary>
+            Create an instance of a Macro control and return it.
+            Because the macro control uses inline client script whichs is not generated after postback
+            That's why we use the Page Picker instead of the content picker of the macro.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.macrocontainer.MacroControlFactory.GetValueFromMacroControl(System.Web.UI.Control)">
+            <summary>
+            Gets the value based on the type of control
+            </summary>
+            <param name="macroControl"></param>
+            <returns></returns>
+        </member>
+        <member name="P:umbraco.editorControls.macrocontainer.MacroControlFactory.MacroControlTypes">
+            <summary>
+            All Possible Macro types
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.macrocontainer.MacroEditor.RendeFormControls">
+            <summary>
+            Renders a from based on the properties of the macro
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.macrocontainer.MacroEditor.AddFormRow(System.Web.UI.Control,System.Web.UI.Control)">
+            <summary>
+            Add a new TableRow to the table. with two cells that holds the Caption and the  form element
+            </summary>
+            <param name="name"></param>
+            <param name="formElement"></param>
+        </member>
+        <member name="M:umbraco.editorControls.macrocontainer.MacroEditor.CreateUmbracoMacroTag">
+            <summary>
+            Builds an Umbraco Macro tag if a user selected a macro
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:umbraco.editorControls.macrocontainer.PersistableMacroProperty.Name">
+            <summary>
+            Macro Caption
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.macrocontainer.PersistableMacroProperty.Alias">
+            <summary>
+            Macro Alias
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.macrocontainer.PersistableMacroProperty.Value">
+            <summary>
+            Macro Value
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.macrocontainer.PersistableMacroProperty.AssemblyName">
+            <summary>
+            AssemblyName of the Property of teh Macro
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.macrocontainer.PersistableMacroProperty.TypeName">
+            <summary>
+            TypeName of the property of the macro
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.macrocontainer.PrevalueEditor.#ctor(umbraco.cms.businesslogic.datatype.BaseDataType)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="dataType"></param>
+        </member>
+        <member name="M:umbraco.editorControls.macrocontainer.PrevalueEditor.OnInit(System.EventArgs)">
+            <summary>
+            Initializes controls
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:umbraco.editorControls.macrocontainer.PrevalueEditor.OnLoad(System.EventArgs)">
+            <summary>
+            Initialize the form
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:umbraco.editorControls.macrocontainer.PrevalueEditor.GetSelectedMacosFromCheckList">
+            <summary>
+            Returns the selected Macro's in a comma seperated string
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.macrocontainer.PrevalueEditor.Save">
+            <summary>
+            Save settings
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.macrocontainer.PrevalueEditor.Datatype">
+            <summary>
+            Reference to the datatype 
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.macrocontainer.PrevalueEditor.Editor">
+            <summary>
+            Reference to the editor
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.mediaChooser">
+            <summary>
+            Summary description for mediaChooser.
+            </summary>    
+        </member>
+        <member name="M:umbraco.editorControls.mediaChooser.RenderJSComponents">
+            <summary>
+            Renders the required media picker javascript
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.mediaChooser.OnInit(System.EventArgs)">
+            <summary>
+            sets the modal width/height based on properties
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="T:umbraco.editorControls.mediapicker.MediaChooserScripts">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.mediapicker.MediaChooserScripts.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.mediapicker.MediaChooserScripts.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.mediapicker.MediaChooserScripts.MediaPicker">
+             <summary>
+               Looks up a localized string similar to /// &lt;reference path=&quot;/umbraco_client/Application/NamespaceManager.js&quot; /&gt;
+            
+            Umbraco.Sys.registerNamespace(&quot;Umbraco.Controls&quot;);
+            
+            (function($) {
+                Umbraco.Controls.MediaChooser = function(label, mediaIdValueClientID, previewContainerClientID, imgViewerClientID, mediaTitleClientID, mediaPickerUrl, width, height, umbracoPath) {
+                    return {
+                        _mediaPickerUrl: mediaPickerUrl,
+                        _webServiceUrl: umbracoPath + &quot;/webservices/legacyAjaxCalls.asmx/GetNodeName&quot;,
+                        _label: labe [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="T:umbraco.editorControls.mediapicker.MemberPickerDataType">
+            <summary>
+            Summary description for MemberPickerDataType.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.memberPicker">
+            <summary>
+            Summary description for memberPicker.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.memberPicker.Render(System.Web.UI.HtmlTextWriter)">
+            <summary> 
+            Render this control to the output parameter specified.
+            </summary>
+            <param name="output"> The HTML writer to write out to </param>
+        </member>
+        <member name="T:umbraco.editorControls.memberpicker.MemberPickerDataType">
+            <summary>
+            Summary description for MemberPickerDataType.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.numberfield.DataInteger">
+            <summary>
+            Summary description for DataInteger.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.numberfield.IDataTypenteger">
+            <summary>
+            Summary description for IDataTypenteger.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.pagePicker">
+            <summary>
+            Summary description for pagePicker.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.pagepicker.PagePickerDataType">
+            <summary>
+            Summary description for PagePickerDataType.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.radiobuttonlist.RadioButtonListDataType">
+            <summary>
+            Summary description for ColorPickerDataType.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.relatedlinks.PagePickerDataExtractor">
+            <summary>
+            Allows for the extraction of the link ID for the selected node of the
+            PagePicker (aka content picker) class for integration of the PagePicker
+            in another datatype.
+            This class replaces the database linkup that normally holds the data and
+            stores the data locally in memory and allows for easy access to the
+            data (after the IDataEditor has performed a save()).
+            This class was not designed for, but might work equally well for other datatypes.
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.relatedlinks.RelatedLinksDataEditor.IsValid">
+            <summary>
+            Internal logic for validation controls to detect whether or not it's valid (has to be public though) 
+            </summary>
+            <value>Am I valid?</value>
+        </member>
+        <member name="T:umbraco.editorControls.simpleEditor.SimpleEditor">
+            <summary>
+            Summary description for simpleEditor.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.simpleEditor.simpleEditorDataType">
+            <summary>
+            Summary description for simpleEditorDataType.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tags.library.getEverythingWithTags(System.String)">
+             <summary>
+             Gets everything (content, media, members) in Umbraco with the specified tags.
+             It returns the found nodes as:
+             <root>
+             <node><data/>...</node>
+             <node><data/>...</node>
+             etc...
+             </root>
+             </summary>
+             <param name="tags">Commaseparated tags.</param>
+             <returns>
+             A XpathNodeIterator
+            </returns>
+        </member>
+        <member name="M:umbraco.editorControls.tags.library.getContentsWithTags(System.String)">
+             <summary>
+             Gets all content nodes in Umbraco with the specified tag.
+             It returns the found nodes as:
+             <root>
+             <node><data/>...</node>
+             <node><data/>...</node>
+             etc...
+             </root>
+             </summary>
+             <param name="tags">Commaseparated tags.</param>
+             <returns>
+             A XpathNodeIterator
+            </returns>
+        </member>
+        <member name="M:umbraco.editorControls.tags.library.getMembersWithTags(System.String)">
+             <summary>
+             Returns all members (does not care about groups and types) in Umbraco with the specified tag.
+             It returns the found nodes as:
+             <root>
+             <node><data/>...</node>
+             <node><data/>...</node>
+             etc...
+             </root>
+             </summary>
+             <param name="tags">Comma separated tags.</param>
+             <returns>
+             A XpathNodeIterator
+            </returns>
+        </member>
+        <member name="M:umbraco.editorControls.tags.library.getMediaWithTags(System.String)">
+             <summary>
+             Returns all media nodes in Umbraco with the specified tag.
+             It returns the found nodes as:
+             <root>
+             <node><data/>...</node>
+             <node><data/>...</node>
+             etc...
+             </root>
+             </summary>
+             <param name="tags">Commaseparated tags.</param>
+             <returns>
+             A XpathNodeIterator
+            </returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:umbraco.editorControls.tags.library.getAllTags" -->
+        <!-- Badly formed XML comment ignored for member "M:umbraco.editorControls.tags.library.getAllTagsInGroup(System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:umbraco.editorControls.tags.library.getTagsFromNode(System.String)" -->
+        <member name="M:umbraco.editorControls.tags.library.GetTagsFromNodeAsITags(System.Int32)">
+            <summary>
+            Gets the tags from node as ITag objects.
+            </summary>
+            <param name="nodeId">The node id.</param>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.editorControls.tags.library.GetTagsFromGroupAsITags(System.String)">
+            <summary>
+            Gets the tags from group as ITag objects.
+            </summary>
+            <param name="group">The group.</param>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.editorControls.tags.library.GetTagsAsITags">
+            <summary>
+            Gets all the tags as ITag objects
+            </summary>
+            <param name="nodeId">The node id.</param>
+            <returns></returns>
+        </member>
+        <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection">
+            <summary>
+            Description of ConfigSection.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection.InstallPath">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection.Mode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection.GlobalSettings">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection.GzipEnabled">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection.GzipExpiresOffset">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection.GzipDiskCache">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection.GzipCachePath">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.ConfigSection.GzipNoCompression">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor">
+            <summary>
+            Description of GzipCompressor.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.AddFile(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.AddData(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.Compress(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="to_stream"></param>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.NoCompression">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.DiskCache">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipCompressor.CachePath">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipModule">
+            <summary>
+            Description of HttpHandler.
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.IModule">
+            <summary>
+            Description of IAction.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.IModule.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.GzipModule.ProcessRequest(System.Web.HttpContext)">
+            <summary></summary>
+            <param name="context">Request context.</param>
+        </member>
+        <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSON">
+            <summary>
+            Description of JSON.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSON.SerializeRPC(System.String,System.Object,System.Object,System.IO.Stream)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSON.WriteObject(System.IO.TextWriter,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+            <param name="obj"></param>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSON.ParseJSON(System.IO.TextReader)">
+            <summary>
+            
+            </summary>
+            <param name="reader"></param>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSON.ParseRPC(System.IO.TextReader)">
+            <summary>
+            
+            </summary>
+            <param name="reader"></param>
+            <returns></returns>
+        </member>
+        <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONRpcCall">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONRpcCall.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONRpcCall.Method">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONRpcCall.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONRpcCall.Args">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONToken">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONToken.Boolean">
+            <summary> </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONToken.Integer">
+            <summary> </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONToken.String">
+            <summary> </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONToken.Null">
+            <summary> </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONToken.Float">
+            <summary> </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONToken.StartArray">
+            <summary> </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONToken.EndArray">
+            <summary> </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONToken.PropertyName">
+            <summary> </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONToken.StartObject">
+            <summary> </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONToken.EndObject">
+            <summary> </summary>
+        </member>
+        <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader">
+            <summary>
+             Description of JSONReader.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader.#ctor(System.IO.TextReader)">
+            <summary>
+            
+            </summary>
+            <param name="reader"></param>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader.Read">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader.Location">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader.TokenType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONReader.Value">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONLocation">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONLocation.InArray">
+            <summary> </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONLocation.InObject">
+            <summary> </summary>
+        </member>
+        <member name="F:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONLocation.Normal">
+            <summary> </summary>
+        </member>
+        <member name="T:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter">
+            <summary>
+            Description of JSONWriter.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter.WriteStartObject">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter.WriteEndObject">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter.WriteStartArray">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter.WriteEndArray">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter.WritePropertyName(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter.WriteProperty(System.String,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <param name="obj"></param>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter.WriteValue(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="obj"></param>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter.WriteNull">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter.Close">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.tinyMCE3.webcontrol.plugin.JSONWriter.EncodeString(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.editorControls.ultimatepicker.ultimatePickerDataEditor.addListControlNode(umbraco.cms.businesslogic.Content,System.Int32,System.Boolean,System.Web.UI.WebControls.ListControl,System.String[])">
+            <summary>
+            Adds sub nodes to the ListControl object passed into the method, based on the Content node passed in
+            </summary>
+            <param name="node">The node whos sub nodes are to be added to the ListControl</param>
+            <param name="level">The level of the current node</param>
+            <param name="showGrandChildren">Boolean determining if grand children should be displayed as well</param>
+            <param name="control">The ListControl the nodes must be added to</param>
+            <param name="documentAliasFilter">String representing the documentTypeAlias that should be filtered for. If empty no filter is applied</param>
+        </member>
+        <member name="M:umbraco.editorControls.ultimatepicker.ultimatePickerDataEditor.setupAutoComplete(System.Int32)">
+            <summary>
+            Sets up the autocomplete functionality
+            </summary>
+        </member>
+        <member name="P:umbraco.editorControls.ultimatepicker.ultimatePickerDataEditor.IsValid">
+            <summary>
+            Internal logic for validation controls to detect whether or not it's valid (has to be public though) 
+            </summary>
+            <value>Am I valid?</value>
+        </member>
+        <member name="M:umbraco.editorControls.ultimatepicker.ultimatePickerPrevalueEditor.validateFilterInput(System.String)">
+            <summary>
+            Validates and clears the filter input from errorneous entries
+            </summary>
+            <param name="filterInput">The filter string to be validated</param>
+            <returns>A validated filtered comma separated string</returns>
+        </member>
+        <member name="T:umbraco.editorControls.uploadfield.DataTypeUploadField">
+            <summary>
+            Summary description for DataTypeUploadField.
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.uploadField.FindControlRecursive``1(System.Web.UI.Control,System.String)">
+            <summary>
+            Recursively finds a control with the specified identifier.
+            </summary>
+            <typeparam name="T">
+            The type of control to be found.
+            </typeparam>
+            <param name="parent">
+            The parent control from which the search will start.
+            </param>
+            <param name="id">
+            The identifier of the control to be found.
+            </param>
+            <returns>
+            The control with the specified identifier, otherwise <see langword="null"/> if the control 
+            is not found.
+            </returns>
+        </member>
+        <member name="M:umbraco.editorControls.uploadField.Render(System.Web.UI.HtmlTextWriter)">
+            <summary> 
+            Render this control to the output parameter specified.
+            </summary>
+            <param name="output"> The HTML writer to write out to </param>
+        </member>
+        <member name="P:umbraco.editorControls.uploadField.IsValid">
+            <summary>
+            Internal logic for validation controls to detect whether or not it's valid (has to be public though) 
+            </summary>
+            <value>Am I valid?</value>
+        </member>
+        <member name="T:umbraco.editorControls.yesNo">
+            <summary>
+            Generates a radiolist of yes and no for boolean fields
+            </summary>
+        </member>
+        <member name="M:umbraco.editorControls.yesNo.Render(System.Web.UI.HtmlTextWriter)">
+            <summary> 
+            Render this control to the output parameter specified.
+            </summary>
+            <param name="output"> The HTML writer to write out to </param>
+        </member>
+        <member name="T:umbraco.editorControls.yesno.YesNoDataType">
+            <summary>
+            Summary description for YesNoDataType.
+            </summary>
+        </member>
+    </members>
+</doc>

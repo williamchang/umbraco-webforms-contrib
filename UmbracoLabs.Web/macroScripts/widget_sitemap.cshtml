@@ -1,0 +1,21 @@
+﻿@using UmbracoLabs.Web.Helpers;
+
+@inherits umbraco.MacroEngines.DynamicNodeContext
+
+@* Traverse node. Helper function. *@
+@helper TraverseNode(dynamic cmsNode) {
+	var cmsItems = cmsNode.Children.Where("navigationHide == false");
+
+	if(cmsItems.Count() > 0) {
+		<ul>
+		@foreach(var cmsItem in cmsItems) {
+			<li>
+				<a href="@CmsHelper.GetUrl(cmsItem)">@cmsItem.Name</a>
+				@TraverseNode(cmsItem)
+			</li>
+		}
+		</ul>
+	}
+}
+
+@TraverseNode(Model.AncestorOrSelf(1))

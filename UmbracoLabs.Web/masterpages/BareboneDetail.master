@@ -1,0 +1,12 @@
+﻿<%@ master language="C#" masterpagefile="~/masterpages/Barebone.master" autoeventwireup="true" codebehind="BareboneDetail.master.cs" inherits="UmbracoLabs.Web.Templates.BareboneDetail" %>
+<%@ mastertype virtualpath="~/masterpages/Barebone.master" %>
+<asp:content contentplaceholderid="RegionMiddle" runat="server">
+<div class="content_header">
+	<h3><umbraco:item field="nameLongText" useifempty="pageName" runat="server"/></h3>
+</div>
+<umbraco:item field="summaryText" inserttextbefore='<div class="content_summary">' inserttextafter='</div>' runat="server"/>
+<umbraco:item field="splashMacro" inserttextbefore='<div class="content_splash">' inserttextafter='</div>' runat="server"/>
+<umbraco:item field="bodyText" inserttextbefore='<div class="content_body">' inserttextafter='</div>' runat="server"/>
+<umbraco:item field="bodyText_column1" inserttextbefore='<div class="content_body_column1">' inserttextafter='</div>' runat="server"/>
+<umbraco:item field="bodyText_column2" inserttextbefore='<div class="content_body_column2">' inserttextafter='</div>' runat="server"/>
+</asp:content>

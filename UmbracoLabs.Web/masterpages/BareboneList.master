@@ -1,0 +1,17 @@
+﻿<%@ master language="C#" masterpagefile="~/masterpages/Barebone.master" autoeventwireup="true" codebehind="BareboneList.master.cs" inherits="UmbracoLabs.Web.Templates.BareboneList" %>
+<%@ mastertype virtualpath="~/masterpages/Barebone.master" %>
+<asp:content contentplaceholderid="RegionMiddle" runat="server">
+<div class="content_header">
+	<h3><umbraco:item  field="nameLongText" useifempty="pageName" runat="server"/></h3>
+</div>
+<div class="content_list">
+	<umbraco:macro alias="GenericList" runat="server"/>
+</div>
+</asp:content>
+
+<%--
+References:
+http://billrob.com/archive/2007/02/10/How-to-add-automatically-add-namespaces-to-aspx-pages.aspx
+http://weblogs.asp.net/scottgu/archive/2007/08/10/the-asp-listview-control-part-1-building-a-product-listing-page-with-clean-css-ui.aspx
+http://tuvian.wordpress.com/2011/06/14/how-to-use-listview-control-in-asp-net/
+--%>

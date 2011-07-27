@@ -1,0 +1,6 @@
+﻿<%@ master language="C#" masterpagefile="~/umbraco/masterpages/default.master" autoeventwireup="true" codebehind="GoogleSitemap.master.cs" inherits="UmbracoLabs.Web.Templates.GoogleSitemap" %>
+<asp:content contentplaceholderid="ContentPlaceHolderDefault" runat="server">
+<!--
+XML
+-->
+</asp:content>

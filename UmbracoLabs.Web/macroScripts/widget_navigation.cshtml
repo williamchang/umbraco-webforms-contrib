@@ -1,0 +1,89 @@
+﻿@using umbraco.MacroEngines;
+@using UmbracoLabs;
+@using UmbracoLabs.Web;
+@using UmbracoLabs.Web.Helpers;
+@using UmbracoLabs.Web.Services;
+
+@inherits umbraco.MacroEngines.DynamicNodeContext
+
+@functions {
+	/// <summary>Is path of ids (comma delimited) match another path of ids.</summary>
+	public bool IsPathsMatch(string ids1, string ids2) {
+		if(!String.IsNullOrEmpty(ids1) && !String.IsNullOrEmpty(ids2)) {
+			var ids1Tokens = ids1.SplitClean(',');
+			var ids2Tokens = ids2.SplitClean(',');
+			
+			if(ids1Tokens.Length >= ids2Tokens.Length && ids2Tokens.Length > 2) {
+				int i;
+				var isValid = true;
+
+				for(i = 2;i < ids2Tokens.Length;i += 1) {
+					if(isValid && !BaseUtility.Equals(ids1Tokens[i], ids2Tokens[i])) {isValid = false;break;}
+				}
+				if(isValid) {return true;}
+			}
+		}
+		return false;
+	}
+}
+
+@* Traverse node. Helper function. *@
+@helper TraverseNode(dynamic cmsNode, int levelBegin) {
+	var defaultUrl = "javascript:;";
+	var maximumLevel = levelBegin + (BaseUtility.ToNullableInt32(Parameter.maximumLevel) ?? 1);
+	var cssIdAttribute = WebHelper.CreateAttributeMarkup("id", Parameter.cssIdText);
+	var cssClassAttribute = WebHelper.CreateAttributeMarkup("class", Parameter.cssClassText);
+	var cssSelectedClassText = Parameter.cssSelectedClassText ?? String.Empty;
+	var cmsItems = cmsNode.Children.Where("navigationHide == false").Where("Level <= " + maximumLevel);
+	
+	if(cmsItems.Count() > 0) {
+		<ul @cssIdAttribute @cssClassAttribute>
+		@foreach(var cmsItem in cmsItems) {
+			var cmsTargetItem = CmsHelper.GetItem(cmsItem.internalLink);
+			var cssClass = cmsItem.cssClassText ?? String.Empty;
+			var url = CmsHelper.GetUrl((DynamicNode)cmsTargetItem) ?? cmsItem.externalLink;
+			var image = CmsHelper.GetMediaItem(cmsItem.imagePicker);
+			var name = CmsHelper.ToString(cmsItem.nameLongText, cmsItem.Name);
+
+			@* Validate for special cases for geolocation. *@
+			if(BaseUtility.Equals("cms_geolocation join-eclub", cssClass) && image != null) {
+				var cmsLocationSiteItem = CmsHelper.GetItem(GeolocationService.GetStateCmsItemId());
+				var cmsNavItem = cmsLocationSiteItem.GetFirstDescendant((string)cmsItem.NodeTypeAlias, (string)cmsItem.Name);
+				if(cmsNavItem != null) {
+					name = CmsHelper.ToString(cmsNavItem.GetPropertyValue("nameLongText"), cmsNavItem.Name);
+					url = CmsHelper.GetUrl(cmsNavItem.GetPropertyValue("internalLink")) ?? cmsNavItem.GetPropertyValue("externalLink");
+					image = CmsHelper.GetMediaItem(cmsNavItem.GetPropertyValue("imagePicker"));
+				}
+			}
+
+			var imageWidth = cmsItem.imageWidth ?? String.Empty;
+			var imageHeight = cmsItem.imageHeight ?? String.Empty;
+
+			if(CurrentModel != null && cmsTargetItem != null && IsPathsMatch(CurrentModel.Path, cmsTargetItem.Path)) {
+				cssClass = String.Concat(cssSelectedClassText, " ", cssClass).Trim();
+			}
+
+			var itemCssIdAttribute = WebHelper.CreateAttributeMarkup("id", cmsItem.cssIdText);
+			var itemCssClassAttribute = WebHelper.CreateAttributeMarkup("class", String.Concat("lv", cmsItem.Level - levelBegin, " ", cssClass).Trim());
+			var itemTitleAttribute = WebHelper.CreateAttributeMarkup("title", cmsItem.tooltipText);
+			var itemHrefAttributeValue = String.IsNullOrEmpty(url) ? defaultUrl : url;
+
+			<li @itemCssIdAttribute @itemCssClassAttribute>
+				@if(image != null) {
+					<a href="@itemHrefAttributeValue" @itemTitleAttribute><img src="@CmsHelper.GetMediaFileUrl(image)" alt="@WebHelper.ToHtmlRaw(name)" width="@imageWidth" height="@imageHeight"/></a>
+				} else {
+					<a href="@itemHrefAttributeValue" @itemTitleAttribute>@name</a>
+				}
+				@TraverseNode(cmsItem, levelBegin)
+			</li>
+		}
+		</ul>
+	}
+}
+
+@{
+	var cmsItem = CmsHelper.GetItem(Parameter.internalLink);
+	if(cmsItem != null) { 
+		@TraverseNode(cmsItem, cmsItem.Level);
+	}
+}
