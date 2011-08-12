@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2010-06-09
-    - Modified: 2011-07-22
+    - Modified: 2011-08-02
     .
 @note
     References:
@@ -28,6 +28,49 @@ public static class BaseUtility
 {
     /// <summary>Static constructor.</summary>
     static BaseUtility() {}
+
+    /// <summary>Encodes a string to be represented as a string literal. The format is essentially a JSON string.</summary>
+    /// <remarks>http://www.west-wind.com/weblog/posts/2007/Jul/14/Embedding-JavaScript-Strings-from-an-ASPNET-Page</remarks>
+    public static string EncodeJsonString(string s, bool includeOuterQuotes = false)
+    {
+        var sb1 = new StringBuilder();
+        if(includeOuterQuotes) {sb1.Append("\"");}
+        foreach(char c in s) {
+            switch(c) {
+                case '\"':
+                    sb1.Append("\\\"");
+                    break;
+                case '\\':
+                    sb1.Append("\\\\");
+                    break;
+                case '\b':
+                    sb1.Append("\\b");
+                    break;
+                case '\f':
+                    sb1.Append("\\f");
+                    break;
+                case '\n':
+                    sb1.Append("\\n");
+                    break;
+                case '\r':
+                    sb1.Append("\\r");
+                    break;
+                case '\t':
+                    sb1.Append("\\t");
+                    break;
+                default:
+                    int i = (int)c;
+                    if(i < 32 || i > 127) {
+                        sb1.AppendFormat("\\u{0:X04}", i);
+                    } else {
+                        sb1.Append(c);
+                    }
+                    break;
+            }
+        }
+        if(includeOuterQuotes) {sb1.Append("\"");}
+        return sb1.ToString();
+    }
 
     /// <summary>Determines whether two specified System.String objects have the same value. Compare strings ignoring the case of the strings being compared.</summary>
     public static bool Equals(string s1, string s2)
@@ -51,7 +94,7 @@ public static class BaseUtility
     public static string GetJsonArray(this string[] items)
     {
         if(items != null) {
-            StringBuilder sb1 = new StringBuilder();
+            var sb1 = new StringBuilder();
             for(int i = 0;i < items.Length;i += 1) {
                 sb1.AppendFormat(", \"{0}\"", items[i]);
             }
@@ -135,8 +178,8 @@ public static class BaseUtility
 
         var repeat = true;
         var index = 0;
-        String value = null;
-        String[] tokens = null;
+        string value = null;
+        string[] tokens = null;
 
         while(repeat) {
             value = rm.GetString(String.Format(format, index));
