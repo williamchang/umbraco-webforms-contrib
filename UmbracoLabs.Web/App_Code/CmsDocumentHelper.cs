@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-08-03
-    - Modified: 2011-08-12
+    - Modified: 2011-08-13
     .
 @note
     References:
@@ -32,8 +32,17 @@ public static class CmsDocumentHelper
     /// <summary>Static constructor.</summary>
     static CmsDocumentHelper() {}
 
+    /// <summary>Copy document under another document.</summary>
+    public static void CopyDocument(Document cmsSourceDocument, int cmsTargetDocumentId, bool relateToOriginal = false)
+    {
+        // Validate dependencies.
+        if(cmsSourceDocument != null && cmsTargetDocumentId >= 0) {
+            cmsSourceDocument.Copy(cmsTargetDocumentId, cmsSourceDocument.User, relateToOriginal);
+        }
+    }
+
     /// <summary>Copy document properties to another document.</summary>
-    public static void CopyDocumentProperties(Document cmsSourceDocument, Document cmsTargetDocument)
+    public static void CopyProperties(Document cmsSourceDocument, Document cmsTargetDocument)
     {
         // Validate dependencies.
         if(cmsSourceDocument != null && cmsTargetDocument != null && String.Equals(cmsSourceDocument.ContentType.Alias, cmsTargetDocument.ContentType.Alias)) {
@@ -52,15 +61,6 @@ public static class CmsDocumentHelper
                     throw new ArrayTypeMismatchException("PropertyType.Alias mismatch between cmsSourceDocument and cmsTargetDocument");
                 }
             }
-        }
-    }
-
-    /// <summary>Copy document under another document.</summary>
-    public static void CopyDocument(Document cmsSourceDocument, int cmsTargetDocumentId, bool relateToOriginal = false)
-    {
-        // Validate dependencies.
-        if(cmsSourceDocument != null && cmsTargetDocumentId >= 0) {
-            cmsSourceDocument.Copy(cmsTargetDocumentId, cmsSourceDocument.User, relateToOriginal);
         }
     }
 
@@ -84,6 +84,36 @@ public static class CmsDocumentHelper
         if(!Relation.IsRelated(cmsParent.Id, cmsChild.Id, relationType) && String.Equals(cmsParent.ContentType.Alias, cmsChild.ContentType.Alias)) {
             Relation.MakeNew(cmsParent.Id, cmsChild.Id, relationType, "");
         }
+    }
+
+    /// <summary>Get first descendant of parent document. Optionally, include self.</summary>
+    public static IList<Document> GetDescendants(Document cmsParent, string typeAlias, bool allSameLevel = false, bool includeSelf = false)
+    {
+        IList<Document> items = new List<Document>();
+
+        if(cmsParent != null) {
+            if(includeSelf && String.Equals(cmsParent.ContentType.Alias, typeAlias)) {
+                items.Add(cmsParent);
+            }
+
+            int currentLevel = -1;
+            var cmsItems = cmsParent.GetDescendants().Cast<Document>().ToList();
+            var cmsItemsCount = cmsItems.Count;
+
+            for(int i = 0;i < cmsItemsCount;i += 1) {
+                if(String.Equals(cmsItems[i].ContentType.Alias, typeAlias)) {
+                    if(allSameLevel && i == 0) {
+                        currentLevel = cmsItems[i].Level;
+                    }
+                    if(allSameLevel && currentLevel == cmsItems[i].Level) {
+                        items.Add(cmsItems[i]);
+                    } else if(currentLevel == -1) {
+                        items.Add(cmsItems[i]);
+                    }
+                }
+            }
+        }
+        return items;
     }
 
     /// <summary>Get documents by parent and name.</summary>
@@ -126,60 +156,91 @@ public static class CmsDocumentHelper
         return items;
     }
 
-    /// <summary>Get first descendant of parent document. Optionally, include self.</summary>
-    public static IList<Document> GetDocumentDescendants(Document cmsParent, string typeAlias, bool allSameLevel = false, bool includeSelf = false)
+    /// <summary>Get first ancestor of current document (using cache). Optionally, include self.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static Document GetFirstAncestor(this Document cmsCurrent, string typeAlias, bool includeSelf = false)
     {
-        IList<Document> items = new List<Document>();
-
-        if(cmsParent != null) {
-            if(includeSelf && BaseUtility.Equals(cmsParent.ContentType.Alias, typeAlias)) {
-                items.Add(cmsParent);
+        if(cmsCurrent != null) {
+            if(includeSelf && String.Equals(cmsCurrent.ContentType.Alias, typeAlias)) {
+                return cmsCurrent;
             }
-
-            int currentLevel = -1;
-            var cmsItems = cmsParent.GetDescendants().Cast<Document>().ToList();
-            var cmsItemsCount = cmsItems.Count;
-
-            for(int i = 0;i < cmsItemsCount;i += 1) {
-                if(BaseUtility.Equals(cmsItems[i].ContentType.Alias, typeAlias)) {
-                    if(allSameLevel && i == 0) {
-                        currentLevel = cmsItems[i].Level;
-                    }
-                    if(allSameLevel && currentLevel == cmsItems[i].Level) {
-                        items.Add(cmsItems[i]);
-                    } else if(currentLevel == -1) {
-                        items.Add(cmsItems[i]);
-                    }
-                }
-            }
-        }
-        return items;
-    }
-
-    /// <summary>Get first descendant of parent document. Optionally, include self.</summary>
-    public static Document GetDocumentFirstDescendant(Document cmsParent, string itemTypeAlias, bool includeSelf = false)
-    {
-        if(cmsParent != null) {
-            if(includeSelf && BaseUtility.Equals(cmsParent.ContentType.Alias, itemTypeAlias)) {
-                return cmsParent;
-            }
-            return cmsParent.GetDescendants().Cast<Document>()
-                .Where(x => BaseUtility.Equals(x.ContentType.Alias, itemTypeAlias))
+            return cmsCurrent.GetDescendants().Cast<Document>()
+                .Where(x => String.Equals(x.ContentType.Alias, typeAlias))
                 .FirstOrDefault();
         }
         return null;
     }
 
-    /// <summary>Get property value from document.</summary>
-    public static object GetDocumentPropertyValue(Document cmsItem, string propertyAlias)
+    /// <summary>Get first descendant of current document. Optionally, include self.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static Document GetFirstDescendant(this Document cmsCurrent, string typeAlias, bool includeSelf = false)
     {
-        if(cmsItem != null) {
-            var cmsProperty = cmsItem.getProperty(propertyAlias);
+        if(cmsCurrent != null) {
+            if(includeSelf && String.Equals(cmsCurrent.ContentType.Alias, typeAlias)) {
+                return cmsCurrent;
+            }
+            return cmsCurrent.GetDescendants().Cast<Document>()
+                .Where(x => String.Equals(x.ContentType.Alias, typeAlias))
+                .FirstOrDefault();
+        }
+        return null;
+    }
+
+    /// <summary>Get first descendant from document path. Try using CMS cache and then CMS database.</summary>
+    public static Document GetFirstDescendant(string cmsPath, string typeAlias)
+    {
+        if(!String.IsNullOrEmpty(cmsPath)) {
+            var tokens = cmsPath.Split(',');
+            var tokensCount = tokens.Length;
+            var id = 0;
+            var hasCmsCache = true;
+            umbraco.MacroEngines.DynamicNode cmsNode = null;
+            Document cmsDocument = null;
+
+            for(int i = 0;i < tokensCount;i += 1) {
+                id = Convert.ToInt32(tokens[i]);
+                if(hasCmsCache) {
+                    cmsNode = CmsHelper.GetItem(id);
+                }
+                if(cmsNode != null && String.Equals(cmsNode.NodeTypeAlias, typeAlias)) {
+                    return cmsNode.ToDocument();
+                } else if(cmsNode == null && Document.IsDocument(id)) {
+                    hasCmsCache = false;
+                    cmsDocument = new Document(id);
+                    if(String.Equals(cmsDocument.ContentType.Alias, typeAlias)) {
+                        return new Document(id);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /// <summary>Get property value from document.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static object GetPropertyValue(this Document cmsCurrent, string propertyAlias)
+    {
+        if(cmsCurrent != null) {
+            var cmsProperty = cmsCurrent.getProperty(propertyAlias);
             if(cmsProperty != null) {
                 return cmsProperty.Value;
             }
         }
         return null;
+    }
+
+    /// <summary>To umbraco.cms.businesslogic.web.Document object. Using CMS database.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static Document ToDocument(this umbraco.MacroEngines.DynamicNode cmsCurrent)
+    {
+        return new Document(cmsCurrent.Id);
+    }
+
+    /// <summary>To umbraco.MacroEngines.DynamicNode object. Document must be published. Using CMS cache.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static umbraco.MacroEngines.DynamicNode ToDynamicNode(this Document cmsCurrent)
+    {
+        return new umbraco.MacroEngines.DynamicNode(cmsCurrent.Id);
     }
 }
 

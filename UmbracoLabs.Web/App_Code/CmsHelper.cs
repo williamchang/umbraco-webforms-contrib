@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-06-21
-    - Modified: 2011-07-25
+    - Modified: 2011-08-14
     .
 @note
     References:
@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using umbraco;
 using umbraco.cms.businesslogic.macro;
 using umbraco.interfaces;
 using umbraco.MacroEngines;
@@ -33,24 +34,21 @@ public static class CmsHelper
     /// <summary>Static constructor.</summary>
     static CmsHelper() {}
 
-    /// <summary>Get parents (aka ancestors). Optionally, include self and nodeTypeAlias (null to disable).</summary>
+    /// <summary>Get first ancestor. Optionally, include self.</summary>
     /// <remarks>Extension method.</remarks>
-    public static IList<INode> GetAncestors(this INode cmsItem, bool includeSelf = false, string nodeTypeAlias = null)
+    public static DynamicNode GetFirstAncestor(this DynamicNode cmsItem, string nodeTypeAlias, string pageName, bool includeSelf = false)
     {
-        var cmsItems = new List<INode>();
+        IList<DynamicNode> cmsItems = null;
 
-        if(includeSelf == false) {
-            cmsItem = (Node)cmsItem.Parent;
-        }
-        while(cmsItem != null) {
-            if(String.IsNullOrEmpty(nodeTypeAlias)) {
-                cmsItems.Add(cmsItem);
-            } else if(BaseUtility.Equals(nodeTypeAlias, cmsItem.NodeTypeAlias)) {
-                cmsItems.Add(cmsItem);
+        if(cmsItem != null) {
+            if(includeSelf) {
+                cmsItems = cmsItem.AncestorsOrSelf(nodeTypeAlias).Items;
+            } else {
+                cmsItems = cmsItem.Ancestors(nodeTypeAlias).Items;
             }
-            cmsItem = (Node)cmsItem.Parent;
+            return cmsItems.Where(x => x.Name == pageName).FirstOrDefault();
         }
-        return cmsItems;
+        return null;
     }
 
     /// <summary>Get first parent (aka ancestor) that has a property value. Optionally, include self and nodeTypeAlias (null to disable).</summary>
@@ -78,7 +76,7 @@ public static class CmsHelper
     /// <remarks>Extension method.</remarks>
     public static DynamicNode GetFirstDescendant(this DynamicNode cmsItem, string nodeTypeAlias, string pageName, bool includeSelf = false)
     {
-        IList<DynamicNode> cmsItems;
+        IList<DynamicNode> cmsItems = null;
 
         if(cmsItem != null) {
             if(includeSelf) {
@@ -86,9 +84,7 @@ public static class CmsHelper
             } else {
                 cmsItems = cmsItem.Descendants(nodeTypeAlias).Items;
             }
-            if(cmsItems.Count > 0) {
-                return cmsItems.Where(x => x.Name == pageName).FirstOrDefault();
-            }
+            return cmsItems.Where(x => x.Name == pageName).FirstOrDefault();
         }
         return null;
     }
@@ -97,7 +93,7 @@ public static class CmsHelper
     /// <remarks>Extension method.</remarks>
     public static string GetFirstDescendantPropertyValue(this DynamicNode cmsItem, string propertyAlias, string pageName, bool includeSelf = false, string nodeTypeAlias = null)
     {
-        IList<DynamicNode> cmsItems;
+        IList<DynamicNode> cmsItems = null;
 
         if(cmsItem != null) {
             if(nodeTypeAlias != null && includeSelf) {
@@ -119,7 +115,7 @@ public static class CmsHelper
     }
 
     /// <summary>Get an array of id's (comma delimited) matched items' property (alias).</summary>
-    public static IList<string> GetIds(DynamicNodeList cmsItems, string alias, string[] tokens)
+    public static IList<string> GetIds(DynamicNodeList cmsItems, string propertyAlias, string[] tokens)
     {
         IList<string> items = new List<string>();
         int cmsItemsCount = cmsItems.Items.Count;
@@ -128,7 +124,7 @@ public static class CmsHelper
 
         for(i = 0;i < cmsItemsCount;i += 1) {
             for(j = 0;j < tokensCount;j += 1) {
-                if(BaseUtility.Equals(cmsItems.Items[i].GetProperty(alias).Value, tokens[j])) {
+                if(BaseUtility.Equals(cmsItems.Items[i].GetProperty(propertyAlias).Value, tokens[j])) {
                     items.Add(cmsItems.Items[i].Id.ToString());
                 }
             }
@@ -181,13 +177,19 @@ public static class CmsHelper
     public static string GetMediaFileUrl(int? id)
     {
         if(id != null) {
-            var cmsMediaItem = new umbraco.cms.businesslogic.media.Media(id ?? 0);
+            dynamic cmsMediaItem = new DynamicMedia(id ?? 0);
             if(cmsMediaItem != null) {
-                var propMediaFile = cmsMediaItem.getProperty("umbracoFile");
-                if(propMediaFile != null) {
-                    return propMediaFile.Value.ToString();
-                }
+                return GetMediaFileUrl(cmsMediaItem);
             }
+            /*
+            var xmlNode = library.GetMedia(id ?? 0, false);
+            var xmlNodes = xmlNode.Current.Select("data[@alias='umbracoFile']");
+            var url = String.Empty;
+            while(xmlNodes.MoveNext()) {
+                url = xmlNodes.Current.Value;
+                break;
+            }
+            */
         }
         return null;
     }
@@ -253,10 +255,10 @@ public static class CmsHelper
 
     /// <summary>Get value from dynamicnode's property.</summary>
     /// <remarks>Extension method.</remarks>
-    public static string GetPropertyValue(this DynamicNode cmsItem, string alias, bool nullIfEmpty = true)
+    public static string GetPropertyValue(this DynamicNode cmsItem, string propertyAlias, bool nullIfEmpty = true)
     {
         if(cmsItem != null) {
-            var cmsProperty = cmsItem.GetProperty(alias);
+            var cmsProperty = cmsItem.GetProperty(propertyAlias);
             if(cmsProperty != null) {
                 var value = cmsProperty.Value;
                 if(nullIfEmpty == false) {
@@ -271,9 +273,15 @@ public static class CmsHelper
 
     /// <summary>Get value from node's property.</summary>
     /// <remarks>Extension method.</remarks>
-    public static string GetPropertyValue(this INode cmsItem, string alias, bool nullIfEmpty = true)
+    public static string GetPropertyValue(this INode cmsItem, string propertyAlias, bool nullIfEmpty = true)
     {
-        return cmsItem != null ? GetPropertyValue(new DynamicNode(cmsItem), alias, nullIfEmpty) : null;
+        return cmsItem != null ? GetPropertyValue(new DynamicNode(cmsItem), propertyAlias, nullIfEmpty) : null;
+    }
+
+    /// <summary>Get root node.</summary>
+    public static DynamicNode GetRootItem()
+    {
+        return new DynamicNode(-1);
     }
 
     /// <summary>Get URL by content item.</summary>
@@ -337,10 +345,30 @@ public static class CmsHelper
         return pairItems.OrderBy(x => x.Value).Select(x => x.Key).ToList();
     }
 
+    /// <summary>To umbraco.MacroEngines.DynamicNode object.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static DynamicNode ToDynamicNode(this INode cmsItem)
+    {
+        return new DynamicNode(cmsItem);
+    }
+
+    /// <summary>Converts the value of the specified object to its equivalent System.Web.HtmlString representation for Razor.</summary>
+    public static HtmlString ToHtmlRaw(Object value, string defaultValue)
+    {
+        return BaseUtility.ToString(value, defaultValue).ToHtmlRaw();
+    }
+    
     /// <summary>To list from razor and lambda expressions using dynamic.</summary>
     public static IList<DynamicNode> ToList(DynamicNodeList cmsItems)
     {
        return cmsItems.Items;
+    }
+
+    /// <summary>To umbraco.interfaces.INode object.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static INode ToNode(this DynamicNode cmsItem)
+    {
+        return new Node(cmsItem.Id);
     }
 
     /// <summary>Converts the value of the specified object to its equivalent string representation.</summary>

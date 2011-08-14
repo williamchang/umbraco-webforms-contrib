@@ -1,13 +1,13 @@
 /**
 @file
-    RelationDocumentEvent.cs
+    RelationBackofficeEvent.cs
 @author
     William Chang
 @version
     0.1
 @date
     - Created: 2010-06-09
-    - Modified: 2011-07-22
+    - Modified: 2011-08-14
     .
 @note
     References:
@@ -28,11 +28,11 @@ namespace UmbracoLabs {
 
 /// <summary>Using relation API with Umbraco (CMS) document events.</summary>
 /// <remarks>This class inherits from ApplicationBase and is therefore automatically instantiated on application_start.</remarks>
-public class RelationDocumentEvent : ApplicationBase
+public class RelationBackofficeEvent : ApplicationBase
 {
     /// <summary>Default constructor.</summary>
     /// <remarks>All events are registered using this constructor.</remarks>
-    public RelationDocumentEvent()
+    public RelationBackofficeEvent()
     {
         // Subscribe event.
         Document.AfterPublish += new Document.PublishEventHandler(Document_AfterPublish);
@@ -40,8 +40,10 @@ public class RelationDocumentEvent : ApplicationBase
         Document.AfterMoveToTrash += new Document.MoveToTrashEventHandler(Document_AfterMoveToTrash);
     }
 
-    /// <summary>On event after publishing document.</summary>
-    /// <param name="sender">The sender (a documet object).</param>
+#region Backoffice Events
+
+    /// <summary>On event, after publishing document.</summary>
+    /// <param name="sender">The sender (a document object).</param>
     /// <param name="e">The <see cref="umbraco.cms.businesslogic.PublishEventArgs"/> instance containing the event data.</param>
     protected void Document_AfterPublish(Document sender, PublishEventArgs e)
     {
@@ -75,13 +77,15 @@ public class RelationDocumentEvent : ApplicationBase
         }
     }
 
-    /// <summary>On event before moving document to trash.</summary>
+    /// <summary>On event, before moving document to trash.</summary>
     protected void Document_BeforeMoveToTrash(Document sender, MoveToTrashEventArgs e)
     {
         // Future implemetation, ask user for confirmation or give user options.
+
+        throw new NotImplementedException();
     }
 
-    /// <summary>On event after moving document to trash.</summary>
+    /// <summary>On event, after moving document to trash.</summary>
     protected void Document_AfterMoveToTrash(Document sender, MoveToTrashEventArgs e)
     {
         // Validate document have a relation and is trashed.
@@ -99,6 +103,9 @@ public class RelationDocumentEvent : ApplicationBase
             }
         }
     }
+
+#endregion
+
 }
 
 } // END namespace UmbracoLabs

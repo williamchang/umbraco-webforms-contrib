@@ -46,7 +46,7 @@ public partial class Barebone : UmbracoLabs.Web.BaseMasterPage
         _cmsThisNode = Node.GetCurrent();
 
         // Get home from current CMS content item.
-        _cmsHomeNode = _cmsThisNode.GetAncestors(true, CmsHomeTypeAlias).FirstOrDefault();
+        _cmsHomeNode = _cmsThisNode.ToDynamicNode().AncestorOrSelf(CmsHomeTypeAlias).ToNode();
 
         // Process HTML title.
         if(_cmsThisNode != null && _cmsThisNode.Level == 1) {
