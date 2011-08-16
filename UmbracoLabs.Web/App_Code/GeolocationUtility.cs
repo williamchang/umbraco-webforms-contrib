@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-07-19
-    - Modified: 2011-07-19
+    - Modified: 2011-08-15
     .
 @note
     References:
@@ -77,7 +77,7 @@ public static class GeolocationUtility
         public double Longitude {get;set;}
 
         /// <summary>Default constructor.</summary>
-        protected LatLong() {}
+        public LatLong() {}
 
         /// <summary>Argument constructor.</summary>
         public LatLong(double latitude, double longitude)

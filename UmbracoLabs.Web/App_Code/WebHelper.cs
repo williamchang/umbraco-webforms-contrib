@@ -146,6 +146,25 @@ public static class WebHelper
         return String.Empty;
     }
 
+    /// <summary>Get HTTP response as string.</summary>
+    public static string GetHttpResponseAsString(Uri requestUri)
+    {
+        // Validate argument.
+        if(requestUri == null) {throw new ArgumentNullException("requestUri");}
+        // Declare for response.
+        var result = String.Empty;
+        // Create request.
+        var httpRequest = System.Net.WebRequest.Create(requestUri) as System.Net.HttpWebRequest;
+        // Get response.
+        using(var httpResponse = httpRequest.GetResponse() as System.Net.HttpWebResponse) {
+            // Get response stream.
+            var reader = new System.IO.StreamReader(httpResponse.GetResponseStream());
+            // Read the stream and return as a string.
+            result = reader.ReadToEnd();
+        }
+        return result;
+    }
+
     /// <summary>Get page name for CSS class.</summary>
     public static string GetPageNameForCssClass(string pageName)
     {
