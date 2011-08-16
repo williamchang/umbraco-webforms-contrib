@@ -11,6 +11,7 @@ public partial class BareboneList : UmbracoLabs.Web.BaseMasterPage
 {
     protected void Page_Init(object sender, EventArgs e)
     {
+        Master.HtmlBodyCssClass = litHtmlBodyCssClass.Text;
     }
 
     protected void Page_Load(object sender, EventArgs e)

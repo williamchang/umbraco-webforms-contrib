@@ -135,6 +135,13 @@
     <Compile Include="masterpages\BareboneMacro.master.designer.cs">
       <DependentUpon>BareboneMacro.master</DependentUpon>
     </Compile>
+    <Compile Include="masterpages\BareboneDetailColumnTwo.master.cs">
+      <DependentUpon>BareboneDetailColumnTwo.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="masterpages\BareboneDetailColumnTwo.master.designer.cs">
+      <DependentUpon>BareboneDetailColumnTwo.master</DependentUpon>
+    </Compile>
     <Compile Include="masterpages\Empty.master.cs">
       <DependentUpon>Empty.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -167,7 +174,9 @@
     <Content Include="masterpages\Empty.master" />
     <Content Include="masterpages\GoogleSitemap.master" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="masterpages\BareboneDetailColumnTwo.master" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="macroScripts\generic_list.cshtml" />
     <Content Include="macroScripts\widget_navigation.cshtml" />

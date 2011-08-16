@@ -1,0 +1,19 @@
+﻿<%@ master language="C#" masterpagefile="~/masterpages/Barebone.master" autoeventwireup="true" codebehind="BareboneDetailColumnTwo.master.cs" inherits="UmbracoLabs.Web.Templates.BareboneDetailColumnTwo" %>
+<%@ mastertype virtualpath="~/masterpages/Barebone.master" %>
+<asp:content contentplaceholderid="RegionMiddle" runat="server">
+<asp:panel id="pnlConfiguration" visible="false" style="display:none;" runat="server">
+	<asp:literal id="litHtmlBodyCssClass" runat="server">page_detail_column_two</asp:literal>
+</asp:panel>
+<div class="content_header">
+	<h3><umbraco:item field="nameLongText" useifempty="pageName" runat="server"/></h3>
+</div>
+<umbraco:item field="summaryText" inserttextbefore='<div class="content_summary">' inserttextafter='</div>' runat="server"/>
+<div class="content_column1">
+	<umbraco:item field="bodyText" runat="server"/>
+	<umbraco:item field="bodyMacro" runat="server"/>
+</div>
+<div class="content_column2">
+	<umbraco:item field="bodyText_column2" runat="server"/>
+	<umbraco:item field="bodyMacro_column2" runat="server"/>
+</div>
+</asp:content>

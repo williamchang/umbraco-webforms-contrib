@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace UmbracoLabs.Web.Templates {
 
-public partial class BareboneHome : UmbracoLabs.Web.BaseMasterPage
+public partial class BareboneDetailColumnTwo : UmbracoLabs.Web.BaseMasterPage
 {
     protected void Page_Init(object sender, EventArgs e)
     {

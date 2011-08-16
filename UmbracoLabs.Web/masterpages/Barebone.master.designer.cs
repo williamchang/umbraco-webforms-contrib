@@ -13,6 +13,15 @@ namespace UmbracoLabs.Web.Templates {
     public partial class Barebone {
         
         /// <summary>
+        /// html control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl html;
+        
+        /// <summary>
         /// plhTitleInterior control.
         /// </summary>
         /// <remarks>

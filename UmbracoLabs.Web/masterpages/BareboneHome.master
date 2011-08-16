@@ -1,9 +1,16 @@
 ﻿<%@ master language="C#" masterpagefile="~/masterpages/Barebone.master" autoeventwireup="true" codebehind="BareboneHome.master.cs" inherits="UmbracoLabs.Web.Templates.BareboneHome" %>
 <%@ mastertype virtualpath="~/masterpages/Barebone.master" %>
 <asp:content contentplaceholderid="RegionMiddle" runat="server">
-<umbraco:item field="bodyText" inserttextbefore='<div class="content_body">' inserttextafter='</div>' runat="server"/>
+<asp:panel id="pnlConfiguration" visible="false" style="display:none;" runat="server">
+	<asp:literal id="litHtmlBodyCssClass" runat="server">page_home</asp:literal>
+</asp:panel>
 
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae nunc at nulla semper egestas. Vestibulum elementum, lacus a suscipit mollis, purus metus condimentum risus, eget consectetur nibh quam vel sem. Nulla ac mi nunc, eget laoreet libero. Etiam id tellus neque, vel ultrices dolor. Donec iaculis ultrices feugiat. Nam nibh purus, mattis ac facilisis mollis, dapibus et velit. Duis vitae augue et orci pulvinar iaculis nec sed nisl. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque leo dui, lobortis at sodales mattis, elementum at nisi. Curabitur quis felis in diam rhoncus mattis dapibus non diam. Donec vitae odio nec lorem fringilla porta.</p>
+
+<umbraco:item field="bodyText" inserttextbefore='<div class="content_body">' inserttextafter='</div>' runat="server"/>
 <div class="sitemap" style="display:none;margin:8px 0;padding:8px 0;background-color:#ddd;">
 	<umbraco:macro alias="WidgetSitemap" headertext="Sitemap" runat="server"/>
 </div>
+
+<p>Aliquam sit amet risus sem. Vestibulum auctor, mauris in venenatis scelerisque, nisl tortor lobortis tortor, vel vestibulum elit lorem nec ante. Nunc mi leo, accumsan eu cursus a, gravida a nibh. Cras purus purus, suscipit ac sagittis in, dictum laoreet nibh. Vivamus id urna nunc, ut aliquam sapien. Proin nibh sapien, semper euismod laoreet quis, suscipit ac arcu. Nullam ac eleifend mi. Sed tincidunt erat id erat ultricies vitae dignissim felis eleifend. Nullam tempus euismod lacinia. Curabitur tortor eros, auctor ac congue eu, feugiat eu magna. Praesent magna massa, vestibulum id gravida vitae, sollicitudin cursus magna. Pellentesque faucibus sapien sit amet mi semper pulvinar. Aliquam vel orci diam. Pellentesque euismod urna magna. Donec vitae eros sed libero ultrices pellentesque.</p>
 </asp:content>

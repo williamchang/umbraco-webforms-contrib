@@ -1,8 +1,8 @@
 ﻿<%@ master language="C#" masterpagefile="~/umbraco/masterpages/default.master" autoeventwireup="true" codebehind="Barebone.master.cs" inherits="UmbracoLabs.Web.Templates.Barebone" %>
 <asp:content contentplaceholderid="ContentPlaceHolderDefault" runat="server">
 <!DOCTYPE html>
-<html lang="en-US" dir="ltr">
-<head runat="server"> 
+<html lang="en-US" dir="ltr" id="html" clientidmode="static" runat="server">
+<head runat="server">
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 	<!--[if ie]><meta http-equiv="X-UA-Compatible" content="chrome=1"><![endif]-->
 	<umbraco:item field="htmlMetaDescription" inserttextbefore='<meta name="description" content="' inserttextafter='"/>' runat="server"/>

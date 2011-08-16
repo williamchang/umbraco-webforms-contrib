@@ -10,7 +10,7 @@
 namespace UmbracoLabs.Web.Templates {
     
     
-    public partial class BareboneDetail {
+    public partial class BareboneDetailColumnTwo {
         
         /// <summary>
         /// pnlConfiguration control.

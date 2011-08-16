@@ -23,6 +23,8 @@ public partial class Barebone : UmbracoLabs.Web.BaseMasterPage
 
 #region Properties
 
+    public string HtmlCssClass {get;set;}
+
     public string HtmlBodyCssClass {get;set;}
 
     public string CmsHomeTypeAlias {get;set;}
@@ -32,6 +34,7 @@ public partial class Barebone : UmbracoLabs.Web.BaseMasterPage
     /// <summary>Default constructor.</summary>
     public Barebone()
     {
+        HtmlCssClass = String.Empty;
         HtmlBodyCssClass = String.Empty;
         CmsHomeTypeAlias = "Home";
     }
@@ -60,6 +63,11 @@ public partial class Barebone : UmbracoLabs.Web.BaseMasterPage
         // Process HTML script of global variables.
         if(_cmsThisNode != null && _cmsHomeNode != null) {
             SetScriptGlobal();
+        }
+
+        // Process HTML markup element (aka <html></html>).
+        if(!String.IsNullOrEmpty(HtmlCssClass)) {
+            html.Attributes["class"] = HtmlCssClass;
         }
 
         // Process HTML body.

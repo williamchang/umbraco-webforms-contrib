@@ -1,6 +1,9 @@
 ﻿<%@ master language="C#" masterpagefile="~/masterpages/Barebone.master" autoeventwireup="true" codebehind="BareboneDetail.master.cs" inherits="UmbracoLabs.Web.Templates.BareboneDetail" %>
 <%@ mastertype virtualpath="~/masterpages/Barebone.master" %>
 <asp:content contentplaceholderid="RegionMiddle" runat="server">
+<asp:panel id="pnlConfiguration" visible="false" style="display:none;" runat="server">
+	<asp:literal id="litHtmlBodyCssClass" runat="server">page_detail</asp:literal>
+</asp:panel>
 <div class="content_header">
 	<h3><umbraco:item field="nameLongText" useifempty="pageName" runat="server"/></h3>
 </div>
