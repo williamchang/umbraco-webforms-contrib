@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2010-06-09
-    - Modified: 2011-08-02
+    - Modified: 2011-08-19
     .
 @note
     References:
@@ -324,6 +324,20 @@ public static class BaseUtility
     public static string ReplaceLineBreaks(this string source, string value)
     {
         return source.Replace("<br/>", value).Replace("<br />", value).Replace("<br>", value);
+    }
+
+    /// <summary>Replace escape '\n' (newline) and '\r' (carriage return) with text before and text after.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static string ReplaceNewlines(this string source, string textBefore, string textAfter)
+    {
+        var sb1 = new StringBuilder();
+        var tokens = source.SplitClean("\r\n", "\r", "\n");
+        for(int i = 0;i < tokens.Length;i += 1) {
+            sb1.Append(textBefore);
+            sb1.Append(tokens[i]);
+            sb1.Append(textAfter);
+        }
+        return sb1.ToString();
     }
 
     /// <summary>Replace escape '\n' (newline) and '\r' (carriage return) with value.</summary>

@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2010-07-13
-    - Modified: 2011-08-16
+    - Modified: 2011-08-18
     .
 @note
     References:
@@ -31,6 +31,13 @@ public static class WebHelper
     /// <summary>Static constructor.</summary>
     static WebHelper() {}
 
+    /// <summary>Add value to HTML element's attribute.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static void AddValue(this System.Web.UI.AttributeCollection items, string attributeName, params string[] args)
+    {
+        items[attributeName] = String.Concat(items[attributeName] ?? String.Empty, " ", String.Join(" ", args)).Trim();
+    }
+
     /// <summary>Append query string to URL.</summary>
     /// <remarks>Extension method.</remarks>
     public static string AppendQueryString(this string url, IDictionary<string, string> parameters)
@@ -45,7 +52,7 @@ public static class WebHelper
         }
         foreach(var pair in parameters) {
             if(!String.IsNullOrEmpty(pair.Value)) {
-                sb2.AppendFormat("&{0}={1}", HttpUtility.UrlEncode(pair.Key), HttpUtility.UrlEncode(pair.Value));
+                sb2.AppendFormat("&{0}={1}", EncodeUrl(pair.Key), EncodeUrl(pair.Value));
             }
         }
         if(hasSeparator) {
@@ -57,7 +64,7 @@ public static class WebHelper
     }
 
     /// <summary>Create attribute markup code inside an element for Razor.</summary>
-    public static HtmlString CreateAttributeMarkup(string attributeName, string attributeValue)
+    public static System.Web.HtmlString CreateAttributeMarkup(string attributeName, string attributeValue)
     {
         if(!String.IsNullOrEmpty(attributeValue)) {
             return String.Concat(attributeName, "=\"", attributeValue, "\"").ToHtmlRaw();
@@ -85,14 +92,14 @@ public static class WebHelper
     /// <remarks>Extension method.</remarks>
     public static string EncodeHtml(this string s)
     {
-        return HttpUtility.HtmlEncode(s);
+        return System.Web.HttpUtility.HtmlEncode(s);
     }
 
     /// <summary>Converts a string to an URL encoded string.</summary>
     /// <remarks>Extension method.</remarks>
     public static string EncodeUrl(this string s)
     {
-        return HttpUtility.UrlEncode(s);
+        return System.Web.HttpUtility.UrlEncode(s);
     }
 
     /// <summary>Searches the collection for a property that contains the specified text.</summary>
@@ -119,14 +126,14 @@ public static class WebHelper
     /// <remarks>Extension method.</remarks>
     public static string DecodeHtml(this string s)
     {
-        return HttpUtility.HtmlDecode(s);
+        return System.Web.HttpUtility.HtmlDecode(s);
     }
 
     /// <summary>Converts a string that has been encoded for transmission in a URL into a decoded string.</summary>
     /// <remarks>Extension method.</remarks>
     public static string DecodeUrl(this string s)
     {
-        return HttpUtility.UrlDecode(s);
+        return System.Web.HttpUtility.UrlDecode(s);
     }
 
     /// <summary>Get attribute value from HTML (markup).</summary>
@@ -174,7 +181,7 @@ public static class WebHelper
     /// <summary>Get query string. Using current HTTP request.</summary>
     public static string GetQueryString(string key)
     {
-        return HttpUtility.UrlDecode(System.Web.HttpContext.Current.Request.QueryString[HttpUtility.UrlEncode(key)]);
+        return DecodeUrl(System.Web.HttpContext.Current.Request.QueryString[EncodeUrl(key)]);
     }
 
     /// <summary>Get this page's url. Using current HTTP request.</summary>
@@ -202,7 +209,7 @@ public static class WebHelper
 
     /// <summary>Get value from HTTP web request.</summary>
     /// <remarks>First check form and then query string.</remarks>
-    public static string GetValue(this HttpRequest request, string parameter)
+    public static string GetValue(this System.Web.HttpRequest request, string parameter)
     {
         var val = request.Form[parameter];
         if(String.IsNullOrEmpty(val)) {
@@ -268,16 +275,16 @@ public static class WebHelper
 
     /// <summary>To System.Web.HtmlString for Razor.</summary>
     /// <remarks>Extension method.</remarks>
-    public static HtmlString ToHtmlRaw(this string str)
+    public static System.Web.HtmlString ToHtmlRaw(this string str)
     {
-        return new HtmlString(str);
+        return new System.Web.HtmlString(str);
     }
 
     /// <summary>To System.Web.HtmlString and replace newlines for Razor.</summary>
     /// <remarks>Extension method.</remarks>
-    public static HtmlString ToHtmlRawAndReplaceNewlines(this string str, string replace)
+    public static System.Web.HtmlString ToHtmlRawAndReplaceNewlines(this string str, string replace)
     {
-        return new HtmlString(str.ReplaceNewlines(replace));
+        return new System.Web.HtmlString(str.ReplaceNewlines(replace));
     }
 
     /// <summary>To HTML. Using String.Format and replacing two single quotes with double quotes character.</summary>
@@ -311,7 +318,7 @@ public static class WebHelper
             itemKey = (string)pair.Key;
             itemValue = (string)pair.Value;
             if(itemValue != null) {
-                items.Add(String.Concat(HttpUtility.UrlEncode(itemKey), "=", HttpUtility.UrlEncode(itemValue)));
+                items.Add(String.Concat(EncodeUrl(itemKey), "=", EncodeUrl(itemValue)));
             }
         }
         if(items.Count > 0) {

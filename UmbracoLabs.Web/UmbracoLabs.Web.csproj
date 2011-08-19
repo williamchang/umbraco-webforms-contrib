@@ -98,7 +98,9 @@
     <Compile Include="App_Code\BaseUtility.cs" />
     <Compile Include="App_Code\CmsDocumentHelper.cs" />
     <Compile Include="App_Code\CmsHelper.cs" />
+    <Compile Include="App_Code\CmsHttpModule.cs" />
     <Compile Include="App_Code\GeolocationUtility.cs" />
+    <Compile Include="App_Code\LocationBackofficeEvent.cs" />
     <Compile Include="App_Code\WebHelper.cs" />
     <Compile Include="masterpages\Barebone.master.cs">
       <DependentUpon>Barebone.master</DependentUpon>

@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-06-21
-    - Modified: 2011-08-14
+    - Modified: 2011-08-19
     .
 @note
     References:
@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using umbraco;
 using umbraco.cms.businesslogic.macro;
 using umbraco.interfaces;
@@ -133,15 +132,27 @@ public static class CmsHelper
     }
 
     /// <summary>Get item by id.</summary>
-    public static DynamicNode GetItem(int? id)
+    public static DynamicNode GetItem(Object id)
     {
-        return id != null && id > 0 ? new DynamicNode(id) : null;
-    }
-
-    /// <summary>Get item by id.</summary>
-    public static DynamicNode GetItem(string id)
-    {
-        return !String.IsNullOrEmpty(id) ? new DynamicNode(id) : null;
+        if(id == null) {
+            return null;
+        } else if(id is int) {
+            var typedId = Convert.ToInt32(id);
+            if(typedId > 0) {
+                return new DynamicNode(typedId);
+            } else {
+                return null;
+            }
+        } else if(id is String) {
+            var typedId = Convert.ToString(id);
+            if(!String.IsNullOrEmpty(typedId)) {
+                return new DynamicNode(typedId);
+            } else {
+                return null;
+            }
+        } else {
+            return new DynamicNode(id);
+        }
     }
 
     /// <summary>Get items by id's (comma delimited).</summary>
@@ -253,7 +264,7 @@ public static class CmsHelper
         return null;
     }
 
-    /// <summary>Get value from dynamicnode's property.</summary>
+    /// <summary>Get value from property of DynamicNode.</summary>
     /// <remarks>Extension method.</remarks>
     public static string GetPropertyValue(this DynamicNode cmsItem, string propertyAlias, bool nullIfEmpty = true)
     {
@@ -271,14 +282,62 @@ public static class CmsHelper
         return null;
     }
 
-    /// <summary>Get value from node's property.</summary>
+    /// <summary>Get value from property of INode.</summary>
     /// <remarks>Extension method.</remarks>
     public static string GetPropertyValue(this INode cmsItem, string propertyAlias, bool nullIfEmpty = true)
     {
         return cmsItem != null ? GetPropertyValue(new DynamicNode(cmsItem), propertyAlias, nullIfEmpty) : null;
     }
 
-    /// <summary>Get root node.</summary>
+    /// <summary>Get relation item from parent by property, relation static id.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static DynamicNode GetRelationItem(this DynamicNode cmsRelationItem, DynamicNode cmsParentItem)
+    {
+        return GetRelationItem(cmsRelationItem.GetPropertyValue(LocationBackofficeEvent.PROPERTYALIAS__RelationStaticId), cmsRelationItem.NodeTypeAlias, cmsParentItem);
+    }
+
+    /// <summary>Get relation item from parent by property, relation static id.</summary>
+    public static DynamicNode GetRelationItem(string relationStaticId, string nodeTypeAlias, DynamicNode cmsParentItem)
+    {
+        if(!String.IsNullOrEmpty(relationStaticId)) {
+            var cmsDescendants = cmsParentItem.DescendantsOrSelf(nodeTypeAlias).Items;
+            var cmsDescendantsCount = cmsDescendants.Count;
+
+            for(int i = 0;i < cmsDescendantsCount;i += 1) {
+                if(String.Equals(cmsDescendants[i].GetPropertyValue(LocationBackofficeEvent.PROPERTYALIAS__RelationStaticId), relationStaticId)) {
+                    return cmsDescendants[i];
+                }
+            }
+        }
+        return null;
+    }
+
+    /// <summary>Get relation item from parent by property, relation static id.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static IList<DynamicNode> GetRelationItems(this DynamicNode cmsRelationItem, DynamicNode cmsParentItem)
+    {
+        return GetRelationItems(cmsRelationItem.GetPropertyValue(LocationBackofficeEvent.PROPERTYALIAS__RelationStaticId), cmsRelationItem.NodeTypeAlias, cmsParentItem);
+    }
+
+    /// <summary>Get relation items from parent by property, relation static id.</summary>
+    public static IList<DynamicNode> GetRelationItems(string relationStaticId, string nodeTypeAlias, DynamicNode cmsParentItem)
+    {
+        IList<DynamicNode> cmsItems = new List<DynamicNode>();
+
+        if(!String.IsNullOrEmpty(relationStaticId)) {
+            var cmsDescendants = cmsParentItem.DescendantsOrSelf(nodeTypeAlias).Items;
+            var cmsDescendantsCount = cmsDescendants.Count;
+
+            for(int i = 0;i < cmsDescendantsCount;i += 1) {
+                if(String.Equals(cmsDescendants[i].GetPropertyValue(LocationBackofficeEvent.PROPERTYALIAS__RelationStaticId), relationStaticId)) {
+                    cmsItems.Add(cmsDescendants[i]);
+                }
+            }
+        }
+        return cmsItems;
+    }
+
+    /// <summary>Get root item.</summary>
     public static DynamicNode GetRootItem()
     {
         return new DynamicNode(-1);
@@ -305,6 +364,12 @@ public static class CmsHelper
         return String.IsNullOrEmpty(url) ? null : url;
     }
 
+    /// <summary>Get value or null. If empty, then return null.</summary>
+    public static Object GetValueOrNull(Object value)
+    {
+        return IsNullOrStringEmpty(value) ? null : value;
+    }
+
     /// <summary>Contains any from a list.</summary>
     /// <remarks>Extension method.</remarks>
     public static bool ContainsAnySpecial(this string haystack, IList<string> needles)
@@ -326,23 +391,29 @@ public static class CmsHelper
     }
 
     /// <summary>Order list by distance ascending.</summary>
-    public static IList<DynamicNode> OrderByDistance(DynamicNodeList cmsItems, double currentLatitude, double currentLogitude, string cmsLatitudePropertyAlias, string cmsLongitudePropertyAlias)
+    public static IList<DynamicNode> OrderByDistance(IList<DynamicNode> cmsItems, double currentLatitude, double currentLogitude, string cmsLatitudePropertyAlias, string cmsLongitudePropertyAlias)
     {
         IDictionary<DynamicNode, double> pairItems = new Dictionary<DynamicNode, double>();
-        int cmsItemsCount = cmsItems.Items.Count;
+        int cmsItemsCount = cmsItems.Count;
         string propLatitude, propLogitude;
         GeolocationUtility.LatLong pointCurrent = new GeolocationUtility.LatLong(currentLatitude, currentLogitude);
         GeolocationUtility.LatLong pointCompare;
 
         for(int i = 0;i < cmsItemsCount;i += 1) {
-            propLatitude = GetPropertyValue(cmsItems.Items[i], cmsLatitudePropertyAlias);
-            propLogitude = GetPropertyValue(cmsItems.Items[i], cmsLongitudePropertyAlias);
+            propLatitude = GetPropertyValue(cmsItems[i], cmsLatitudePropertyAlias);
+            propLogitude = GetPropertyValue(cmsItems[i], cmsLongitudePropertyAlias);
             if(!String.IsNullOrEmpty(propLatitude) && !String.IsNullOrEmpty(propLogitude)) {
                 pointCompare = new GeolocationUtility.LatLong(Convert.ToDouble(propLatitude), Convert.ToDouble(propLogitude));
-                pairItems.Add(cmsItems.Items[i], GeolocationUtility.GetDistance(pointCurrent, pointCompare, GeolocationUtility.DistanceUnit.Miles));
+                pairItems.Add(cmsItems[i], GeolocationUtility.GetDistance(pointCurrent, pointCompare, GeolocationUtility.DistanceUnit.Miles));
             }
         }
         return pairItems.OrderBy(x => x.Value).Select(x => x.Key).ToList();
+    }
+
+    /// <summary>Replace escape '\n' (newline) and '\r' (carriage return) with text before and text after for Razor.</summary>
+    public static System.Web.HtmlString ReplaceNewlines(string source, string textBefore, string textAfter)
+    {
+        return BaseUtility.ReplaceNewlines(source, textBefore, textAfter).Trim().ToHtmlRaw();
     }
 
     /// <summary>To umbraco.MacroEngines.DynamicNode object.</summary>
@@ -353,13 +424,20 @@ public static class CmsHelper
     }
 
     /// <summary>Converts the value of the specified object to its equivalent System.Web.HtmlString representation for Razor.</summary>
-    public static HtmlString ToHtmlRaw(Object value, string defaultValue)
+    public static System.Web.HtmlString ToHtmlRaw(Object value)
+    {
+        return BaseUtility.ToString(value, String.Empty).ToHtmlRaw();
+    }
+
+    /// <summary>Converts the value of the specified object to its equivalent System.Web.HtmlString representation for Razor.</summary>
+    public static System.Web.HtmlString ToHtmlRaw(Object value, string defaultValue)
     {
         return BaseUtility.ToString(value, defaultValue).ToHtmlRaw();
     }
     
     /// <summary>To list from razor and lambda expressions using dynamic.</summary>
-    public static IList<DynamicNode> ToList(DynamicNodeList cmsItems)
+    /// <remarks>Extension method.</remarks>
+    public static IList<DynamicNode> ToList(this DynamicNodeList cmsItems)
     {
        return cmsItems.Items;
     }
