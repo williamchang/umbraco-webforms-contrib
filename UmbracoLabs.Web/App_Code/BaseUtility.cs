@@ -456,6 +456,15 @@ public static class BaseUtility
         return null;
     }
 
+    /// <summary>Converts the string representation of a number to its signed double equivalent.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static double? ToNullableDouble(this string str)
+    {
+        double value;
+        if(Double.TryParse(str, out value)) {return value;}
+        return null;
+    }
+
     /// <summary>Converts the string representation of a number to its 32-bit signed integer equivalent.</summary>
     /// <remarks>Extension method.</remarks>
     public static int? ToNullableInt32(this string str)
