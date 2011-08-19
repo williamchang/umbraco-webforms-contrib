@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2010-07-13
-    - Modified: 2011-08-18
+    - Modified: 2011-08-19
     .
 @note
     References:
@@ -31,11 +31,18 @@ public static class WebHelper
     /// <summary>Static constructor.</summary>
     static WebHelper() {}
 
+    /// <summary>Add value to HTML element's CSS class attribute.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static void AddCssClass(this System.Web.UI.WebControls.WebControl ctrl, params string[] args)
+    {
+        ctrl.CssClass = String.Concat(ctrl.CssClass ?? String.Empty, " ", String.Join(" ", args)).Trim();
+    }
+
     /// <summary>Add value to HTML element's attribute.</summary>
     /// <remarks>Extension method.</remarks>
-    public static void AddValue(this System.Web.UI.AttributeCollection items, string attributeName, params string[] args)
+    public static void AddAttribute(this System.Web.UI.HtmlControls.HtmlControl ctrl, string attributeName, params string[] args)
     {
-        items[attributeName] = String.Concat(items[attributeName] ?? String.Empty, " ", String.Join(" ", args)).Trim();
+        ctrl.Attributes[attributeName] = String.Concat(ctrl.Attributes[attributeName] ?? String.Empty, " ", String.Join(" ", args)).Trim();
     }
 
     /// <summary>Append query string to URL.</summary>
