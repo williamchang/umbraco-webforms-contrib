@@ -101,6 +101,9 @@
     <Compile Include="App_Code\CmsHttpModule.cs" />
     <Compile Include="App_Code\GeolocationUtility.cs" />
     <Compile Include="App_Code\LocationBackofficeEvent.cs" />
+    <Compile Include="App_Code\RenderRazor.cs" />
+    <Compile Include="App_Code\SecurityHelper.cs" />
+    <Compile Include="App_Code\SqlUtility.cs" />
     <Compile Include="App_Code\WebHelper.cs" />
     <Compile Include="masterpages\Barebone.master.cs">
       <DependentUpon>Barebone.master</DependentUpon>
