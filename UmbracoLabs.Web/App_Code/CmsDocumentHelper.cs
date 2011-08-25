@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-08-03
-    - Modified: 2011-08-13
+    - Modified: 2011-08-25
     .
 @note
     References:
@@ -86,14 +86,14 @@ public static class CmsDocumentHelper
         }
     }
 
-    /// <summary>Get first descendant of parent document. Optionally, include self.</summary>
+    /// <summary>Get descendants of parent document. Optionally, include self. Expensive operation using CMS database.</summary>
     public static IList<Document> GetDescendants(Document cmsParent, string typeAlias, bool allSameLevel = false, bool includeSelf = false)
     {
-        IList<Document> items = new List<Document>();
+        IList<Document> returnItems = new List<Document>();
 
         if(cmsParent != null) {
             if(includeSelf && String.Equals(cmsParent.ContentType.Alias, typeAlias)) {
-                items.Add(cmsParent);
+                returnItems.Add(cmsParent);
             }
 
             int currentLevel = -1;
@@ -106,14 +106,14 @@ public static class CmsDocumentHelper
                         currentLevel = cmsItems[i].Level;
                     }
                     if(allSameLevel && currentLevel == cmsItems[i].Level) {
-                        items.Add(cmsItems[i]);
+                        returnItems.Add(cmsItems[i]);
                     } else if(currentLevel == -1) {
-                        items.Add(cmsItems[i]);
+                        returnItems.Add(cmsItems[i]);
                     }
                 }
             }
         }
-        return items;
+        return returnItems;
     }
 
     /// <summary>Get documents by parent and name.</summary>

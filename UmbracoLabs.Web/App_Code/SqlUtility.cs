@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2010-10-12
-    - Modified: 2011-08-09
+    - Modified: 2011-08-20
     .
 @note
     References:
@@ -49,7 +49,7 @@ public static class SqlUtility
         return "NULL";
     }
 
-    /// <summary>Get string of SQL object.</summary>
+    /// <summary>Get SQL token from System.Object.</summary>
     public static string GetSqlObject(Object obj)
     {
         var s = String.Empty;
@@ -104,7 +104,7 @@ public static class SqlUtility
         return null;
     }
 
-    /// <summary>To JSON from datatable.</summary>
+    /// <summary>To JSON from System.Data.DateTable.</summary>
     public static string ToJson(this DataTable dt) {
         var sb1 = new System.Text.StringBuilder();
 
@@ -113,7 +113,7 @@ public static class SqlUtility
         if(dt.TableName == null || String.IsNullOrEmpty(dt.TableName)) {
             dt.TableName = "table1";
         }
-        sb1.Append("\"" + dt.TableName + "\":"); // Member
+        sb1.AppendFormat("\"{0}\":", dt.TableName); // Member
         sb1.Append("["); // BEGIN: Array
         int rowIndex = 0;
         foreach(System.Data.DataRow row in dt.Rows) {
@@ -121,9 +121,9 @@ public static class SqlUtility
             int colIndex = 0;
             foreach(System.Data.DataColumn col in dt.Columns) {
                 // Header
-                sb1.Append("\"" + col.ColumnName + "\":"); // Name
+                sb1.AppendFormat("\"{0}\":", col.ColumnName); // Name
                 // Body
-                sb1.Append(BaseUtility.GetJsonObject(row[col]));
+                sb1.Append(BaseUtility.GetJsonObject(row[col])); // Value
                 // Separated by a comma for next pair.
                 if(dt.Columns.Count != colIndex + 1) {
                     sb1.Append(", ");
@@ -164,7 +164,7 @@ public static class SqlUtility
         return GetSqlNull();
     }
 
-    /// <summary>To SQL datetime (or use GETDATE() for SQL).</summary>
+    /// <summary>To SQL of System.DateTime (or use GETDATE() for SQL).</summary>
     /// <remarks>Extension method.</remarks>
     public static string ToSqlDate(this Object o)
     {
@@ -174,44 +174,60 @@ public static class SqlUtility
         return GetSqlNull();
     }
 
-    /// <summary>To string dataset.</summary>
+    /// <summary>To string of System.Data.DataSet.</summary>
     /// <remarks>Extension method.</remarks>
-    public static string ToString(this DataSet ds) {
+    public static string ToStringDebug(this DataSet ds) {
         var sb1 = new System.Text.StringBuilder();
 
-        // Get dataset name.
+        // Create dataset name.
         sb1.Append(ds.DataSetName);
-        sb1.Append("<br/>");
+        sb1.AppendFormat("\n");
         foreach(DataTable tbl in ds.Tables) {
-            // Get table name.
-            sb1.Append(tbl.TableName);
-            sb1.Append("<br/>");
-            // Header
+            // Create table name.
+            sb1.AppendFormat(tbl.TableName);
+            sb1.AppendFormat("\n");
+            // Create header
             foreach(DataColumn col in tbl.Columns) {
-                sb1.Append(col.ColumnName + ", ");
+                sb1.AppendFormat("{0}, ", col.ColumnName);
             }
-            sb1.Append("<br/>");
-            // Body
+            sb1.AppendFormat("\n");
+            // Create body
             foreach(DataRow row in tbl.Rows) {
                 foreach(DataColumn col in tbl.Columns) {
-                    sb1.Append(row[col].ToString() + ", ");
+                    sb1.AppendFormat("{0}, ", row[col].ToString());
                 }
-                sb1.Append("<br/>");
+                sb1.AppendFormat("\n");
             }
         }
-        // Statistics
-        sb1.Append("totalTables: " + ds.Tables.Count);
-        sb1.Append("<br/>");
-        sb1.Append("totalTableRows: " + ds.Tables[0].Rows.Count);
-        sb1.Append("<br/>");
-        sb1.Append("totalTableColumns: " + ds.Tables[0].Columns.Count);
-        sb1.Append("<br/>");
+        // Create statistics.
+        sb1.AppendFormat("totalTables: {0}", ds.Tables.Count);
+        sb1.AppendFormat("\n");
+        sb1.AppendFormat("totalTableRows: {0}", ds.Tables[0].Rows.Count);
+        sb1.AppendFormat("\n");
+        sb1.AppendFormat("totalTableColumns: {0}", ds.Tables[0].Columns.Count);
+        sb1.AppendFormat("\n");
         return sb1.ToString();
     }
 
-    /// <summary>To string datatable's column.</summary>
+    /// <summary>To string of System.Data.DateTable.</summary>
     /// <remarks>Extension method.</remarks>
-    public static string ToString(this DataTable dt, string columnName, string separator) {
+    public static string ToStringDebug(this DataTable dt)
+    {
+        var ds = new DataSet();
+        ds.Tables.Add(dt);
+        return ToStringDebug(ds);
+    }
+
+    /// <summary>To string column of System.Data.DateTable.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static string ToStringSpecial(this DataTable dt, string columnName)
+    {
+        return ToStringSpecial(dt, columnName, ", ");
+    }
+
+    /// <summary>To string column of System.Data.DateTable.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static string ToStringSpecial(this DataTable dt, string columnName, string separator) {
         var sb1 = new System.Text.StringBuilder();
         var hasSeparator = false;
         
@@ -223,13 +239,6 @@ public static class SqlUtility
             }
         }
         return sb1.ToString();
-    }
-
-    /// <summary>To string datatable's column.</summary>
-    /// <remarks>Extension method.</remarks>
-    public static string ToString(this DataTable dt, string columnName)
-    {
-        return ToString(dt, columnName, ", ");
     }
 }
 

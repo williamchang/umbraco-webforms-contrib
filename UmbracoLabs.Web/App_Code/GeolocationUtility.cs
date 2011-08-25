@@ -16,9 +16,6 @@
         - http://www.storm-consultancy.com/blog/development/code-snippets/convert-an-angle-in-degrees-to-radians-in-c/
         .
     .
-
-    Usage:
-    
 */
 
 using System;
