@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-06-21
-    - Modified: 2011-08-19
+    - Modified: 2011-08-29
     .
 @note
     References:
@@ -150,9 +150,16 @@ public static class CmsHelper
             } else {
                 return null;
             }
-        } else {
-            return new DynamicNode(id);
+        } else if(id is DynamicNull) {
+            return null;
         }
+        return new DynamicNode(id);
+    }
+
+    /// <summary>Get item by id.</summary>
+    public static DynamicNode GetItem(string id)
+    {
+        return !String.IsNullOrEmpty(id) ? new DynamicNode(id) : null;
     }
 
     /// <summary>Get items by id's (comma delimited).</summary>
@@ -160,16 +167,16 @@ public static class CmsHelper
     /// References:
     /// http://our.umbraco.org/forum/developers/xslt/1741-getting-ultimate-picker-to-return-content-nodes-instead-of-id
     /// </remarks>
-    public static IList<INode> GetItems(string ids)
+    public static IList<DynamicNode> GetItems(string ids)
     {
-        INode cmsItem;
-        IList<INode> cmsItems = new List<INode>();
+        IList<DynamicNode> cmsItems = new List<DynamicNode>();
 
         if(!String.IsNullOrEmpty(ids)) {
-            var cmsItemsId = ids.SplitClean(new char[] {',', '.'});
+            string[] cmsTokens = ids.SplitClean(new char[] {',', '.'});
+            DynamicNode cmsItem = null;
 
-            for(int i = 0;i < cmsItemsId.Length;i += 1) {
-                cmsItem = new Node(cmsItemsId[i].ToTypeOrDefault<int>(0));
+            for(int i = 0;i < cmsTokens.Length;i += 1) {
+                cmsItem = GetItem(cmsTokens[i]);
                 if(cmsItem != null) {
                     cmsItems.Add(cmsItem);
                 }
@@ -312,7 +319,7 @@ public static class CmsHelper
         return null;
     }
 
-    /// <summary>Get relation item from parent by property, relation static id.</summary>
+    /// <summary>Get relation items from parent by property, relation static id.</summary>
     /// <remarks>Extension method.</remarks>
     public static IList<DynamicNode> GetRelationItems(this DynamicNode cmsRelationItem, DynamicNode cmsParentItem)
     {

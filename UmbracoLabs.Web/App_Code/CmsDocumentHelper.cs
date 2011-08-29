@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-08-03
-    - Modified: 2011-08-25
+    - Modified: 2011-08-29
     .
 @note
     References:
@@ -61,6 +61,7 @@ public static class CmsDocumentHelper
                     throw new ArrayTypeMismatchException("PropertyType.Alias mismatch between cmsSourceDocument and cmsTargetDocument");
                 }
             }
+            cmsTargetDocument.Text = cmsSourceDocument.Text;
         }
     }
 
@@ -84,6 +85,12 @@ public static class CmsDocumentHelper
         if(!Relation.IsRelated(cmsParent.Id, cmsChild.Id, relationType) && String.Equals(cmsParent.ContentType.Alias, cmsChild.ContentType.Alias)) {
             Relation.MakeNew(cmsParent.Id, cmsChild.Id, relationType, "");
         }
+    }
+
+    /// <summary>Get descendants of parent document. Expensive operation using CMS database.</summary>
+    public static IList<Document> GetDescendants(Document cmsParent)
+    {
+        return cmsParent.GetDescendants().Cast<Document>().ToList();
     }
 
     /// <summary>Get descendants of parent document. Optionally, include self. Expensive operation using CMS database.</summary>
@@ -227,6 +234,20 @@ public static class CmsDocumentHelper
             }
         }
         return null;
+    }
+
+    /// <summary>Set property value from document.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static bool SetPropertyValue(this Document cmsCurrent, string propertyAlias, object propertyValue)
+    {
+        if(cmsCurrent != null) {
+            var cmsProperty = cmsCurrent.getProperty(propertyAlias);
+            if(cmsProperty != null) {
+                cmsProperty.Value = propertyValue;
+                return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>To umbraco.cms.businesslogic.web.Document object. Using CMS database.</summary>

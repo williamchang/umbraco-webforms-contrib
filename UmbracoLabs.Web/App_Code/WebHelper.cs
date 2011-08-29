@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2010-07-13
-    - Modified: 2011-08-19
+    - Modified: 2011-08-29
     .
 @note
     References:
@@ -322,9 +322,9 @@ public static class WebHelper
         var itemValue = String.Empty;
 
         foreach(System.Collections.DictionaryEntry pair in parameters) {
-            itemKey = (string)pair.Key;
-            itemValue = (string)pair.Value;
-            if(itemValue != null) {
+            itemKey = pair.Key as string;
+            itemValue = pair.Value as string;
+            if(!String.IsNullOrEmpty(itemValue)) {
                 items.Add(String.Concat(EncodeUrl(itemKey), "=", EncodeUrl(itemValue)));
             }
         }

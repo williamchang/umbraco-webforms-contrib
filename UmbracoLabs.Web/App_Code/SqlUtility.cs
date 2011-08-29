@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2010-10-12
-    - Modified: 2011-08-20
+    - Modified: 2011-08-26
     .
 @note
     References:
@@ -193,9 +193,14 @@ public static class SqlUtility
             sb1.AppendFormat("\n");
             // Create body
             foreach(DataRow row in tbl.Rows) {
-                foreach(DataColumn col in tbl.Columns) {
-                    sb1.AppendFormat("{0}, ", row[col].ToString());
+                // Validate row state.
+                if(row.RowState != DataRowState.Deleted) {
+                    foreach(DataColumn col in tbl.Columns) {
+                        sb1.AppendFormat("{0}, ", row[col].ToString());
+                    }
                 }
+                sb1.AppendFormat("\n");
+                sb1.AppendFormat("stateRow: {0}", row.RowState);
                 sb1.AppendFormat("\n");
             }
         }

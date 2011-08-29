@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2010-06-09
-    - Modified: 2011-08-19
+    - Modified: 2011-08-28
     .
 @note
     References:
@@ -255,7 +255,7 @@ public static class BaseUtility
     /// <summary>Indicates whether the specified string is null or an System.String.Empty string.</summary>
     public static bool IsNullOrStringEmpty(this Object value)
     {
-        return value != null ? String.IsNullOrEmpty(Convert.ToString(value)) : false;
+        return value == null ? true : String.IsNullOrEmpty(Convert.ToString(value));
     }
 
     /// <summary>Remove extra whitespaces from string. (Another regular expression: @"\s{2,}" pattern.)</summary>
