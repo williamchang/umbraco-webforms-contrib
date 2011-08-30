@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-06-21
-    - Modified: 2011-08-29
+    - Modified: 2011-08-30
     .
 @note
     References:
@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using umbraco;
 using umbraco.cms.businesslogic.macro;
 using umbraco.interfaces;
@@ -415,6 +416,25 @@ public static class CmsHelper
             }
         }
         return pairItems.OrderBy(x => x.Value).Select(x => x.Key).ToList();
+    }
+
+    /// <summary>Renders the content of a macro to System.String.</summary>
+    /// <remarks>
+    /// References:
+    /// http://our.umbraco.org/wiki/reference/umbracolibrary/rendermacrocontent
+    /// </remarks>
+    public static string RenderMacro(string macroAlias, int cmsItemId, IDictionary<string, Object> parameters = null)
+    {
+        var sb1 = new StringBuilder();
+        var value = String.Empty;
+
+        if(parameters != null) {
+            foreach(var pair in parameters) {
+                value = Convert.ToString(pair.Value);
+                if(!String.IsNullOrEmpty(value)) {sb1.AppendFormat("{0}=\"{1}\" ", pair.Key, value);}
+            }
+        }
+        return umbraco.library.RenderMacroContent(String.Format("<?UMBRACO_MACRO  macroAlias=\"{0}\" {1}/>", macroAlias, sb1.ToString()), cmsItemId);
     }
 
     /// <summary>Replace escape '\n' (newline) and '\r' (carriage return) with text before and text after for Razor.</summary>
