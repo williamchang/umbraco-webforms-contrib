@@ -472,7 +472,7 @@ public static class BaseUtility
         }
         // Do alternative.
         dt = Convert.ToDateTime(s.Substring(0, pos));
-        if (s[pos + 1] == '+') {
+        if(s[pos + 1] == '+') {
             int h = Convert.ToInt32(s.Substring(pos + 2, 2));
             dt = dt.AddHours(-h);
             int m = Convert.ToInt32(s.Substring(pos + 4, 2));
