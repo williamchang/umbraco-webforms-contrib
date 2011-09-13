@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-06-21
-    - Modified: 2011-08-30
+    - Modified: 2011-08-31
     .
 @note
     References:
@@ -403,15 +403,15 @@ public static class CmsHelper
     {
         IDictionary<DynamicNode, double> pairItems = new Dictionary<DynamicNode, double>();
         int cmsItemsCount = cmsItems.Count;
-        string propLatitude, propLogitude;
+        string propLatitude, propLongitude;
         GeolocationUtility.LatLong pointCurrent = new GeolocationUtility.LatLong(currentLatitude, currentLogitude);
         GeolocationUtility.LatLong pointCompare;
 
         for(int i = 0;i < cmsItemsCount;i += 1) {
             propLatitude = GetPropertyValue(cmsItems[i], cmsLatitudePropertyAlias);
-            propLogitude = GetPropertyValue(cmsItems[i], cmsLongitudePropertyAlias);
-            if(!String.IsNullOrEmpty(propLatitude) && !String.IsNullOrEmpty(propLogitude)) {
-                pointCompare = new GeolocationUtility.LatLong(Convert.ToDouble(propLatitude), Convert.ToDouble(propLogitude));
+            propLongitude = GetPropertyValue(cmsItems[i], cmsLongitudePropertyAlias);
+            if(!String.IsNullOrEmpty(propLatitude) && !String.IsNullOrEmpty(propLongitude)) {
+                pointCompare = new GeolocationUtility.LatLong(Convert.ToDouble(propLatitude), Convert.ToDouble(propLongitude));
                 pairItems.Add(cmsItems[i], GeolocationUtility.GetDistance(pointCurrent, pointCompare, GeolocationUtility.DistanceUnit.Miles));
             }
         }

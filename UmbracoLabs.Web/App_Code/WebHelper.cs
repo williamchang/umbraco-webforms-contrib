@@ -182,7 +182,7 @@ public static class WebHelper
     /// <summary>Get page name for CSS class.</summary>
     public static string GetPageNameForCssClass(string pageName)
     {
-        return pageName.RemoveWhitespaces().StripSpecialCharacters();
+        return pageName.RemoveWhitespaces().RemoveSpecialCharacters();
     }
 
     /// <summary>Get query string. Using current HTTP request.</summary>

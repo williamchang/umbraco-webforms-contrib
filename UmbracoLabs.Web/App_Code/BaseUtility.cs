@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2010-06-09
-    - Modified: 2011-08-28
+    - Modified: 2011-09-13
     .
 @note
     References:
@@ -90,6 +90,29 @@ public static class BaseUtility
         return defaultValue;
     }
 
+    /// <summary>Get file tokens (e.g. file directory path, file name, file extension).</summary>
+    /// <remarks>
+    /// References:
+    /// http://jay-zeng.com/how_get_file_extension_c
+    /// </remarks>
+    public static IDictionary<string, string> GetFileTokens(string filepath)
+    {
+        IDictionary<string, string> returnItems = new Dictionary<string, string>();
+        string[] fileTokens = BaseUtility.SplitClean(filepath, '/');
+        int fileTokensCount = fileTokens.Length;
+
+        if(fileTokens != null && fileTokensCount > 0) {
+            string fileFullName = fileTokens[fileTokensCount - 1];
+
+            returnItems.Add("DirectoryPath", filepath.Substring(0, filepath.LastIndexOf("/") + 1));
+            returnItems.Add("FullPath", filepath);
+            returnItems.Add("Name", fileFullName.Substring(0, fileFullName.LastIndexOf(".")));
+            returnItems.Add("FullName", fileFullName);
+            returnItems.Add("Extension", fileFullName.Substring(fileFullName.LastIndexOf(".") + 1));
+        }
+        return returnItems;
+    }
+
     /// <summary>Get string of JSON array.</summary>
     public static string GetJsonArray(this string[] items)
     {
@@ -104,7 +127,7 @@ public static class BaseUtility
     }
 
     /// <summary>Get date string for JSON object.</summary>
-    public static String GetJsonDate(DateTime date)
+    public static string GetJsonDate(DateTime date)
     {
         return date.Year.ToString() + "/" + date.Month.ToString() + "/" + date.Day.ToString();
     }
@@ -271,6 +294,27 @@ public static class BaseUtility
         return System.Text.RegularExpressions.Regex.Replace(source.Trim(), @"\s+", " ");
     }
 
+    /// <summary>Remove all markup code from string.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static string RemoveMarkup(this string s)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(s, @"<(.|\n)*?>", String.Empty);
+    }
+
+    /// <summary>Remove all non-numeric from string.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static string RemoveNonnumeric(this string s)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(s, @"[^0-9]", String.Empty);
+    }
+
+    /// <summary>Remove all special characters from string.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static string RemoveSpecialCharacters(this string s)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(s, @"[^a-zA-Z0-9 ]", String.Empty);
+    }
+
     /// <summary>Remove string in between two strings.</summary>
     /// <remarks>http://www.mycsharpcorner.com//Post.aspx?postID=15</remarks>
     /// <returns>An array of System.String instance containing the string in the middle.</returns>
@@ -347,7 +391,7 @@ public static class BaseUtility
         return source.Replace("\r\n", value).Replace("\r", value).Replace("\n", value);
     }
 
-    /// <summary>Set time in DateTime.</summary>
+    /// <summary>Set time in System.DateTime.</summary>
     /// <remarks>Extension method.</remarks>
     public static DateTime SetTime(this DateTime dt, int hours, int minutes, int seconds, int milliseconds)
     {
@@ -388,27 +432,6 @@ public static class BaseUtility
         }
     }
 
-    /// <summary>Strip (remove) all HTML from string.</summary>
-    /// <remarks>Extension method.</remarks>
-    public static string StripHtml(this string s)
-    {
-        return System.Text.RegularExpressions.Regex.Replace(s, @"<(.|\n)*?>", String.Empty);
-    }
-
-    /// <summary>Strip (remove) all non-numeric from string.</summary>
-    /// <remarks>Extension method.</remarks>
-    public static string StripNonnumeric(this string s)
-    {
-        return System.Text.RegularExpressions.Regex.Replace(s, @"[^0-9]", String.Empty);
-    }
-
-    /// <summary>Strip (remove) all special characters from string.</summary>
-    /// <remarks>Extension method.</remarks>
-    public static string StripSpecialCharacters(this string s)
-    {
-        return System.Text.RegularExpressions.Regex.Replace(s, @"[^a-zA-Z0-9 ]", String.Empty);
-    }
-
     /// <summary>Converts the specified string representation of a logical value to its System.Boolean equivalent.</summary>
     /// <remarks>Extension method.</remarks>
     public static bool ToBoolean(this string str)
@@ -416,9 +439,9 @@ public static class BaseUtility
         return str.ToNullableBoolean() ?? false;
     }
 
-    /// <summary>Parse UTC timestamp string to DateTime.</summary>
+    /// <summary>Parse UTC timestamp string to System.DateTime.</summary>
     /// <remarks>Extension method.</remarks>
-    public static DateTime ToDateTime(this string s)
+    public static DateTime ToDateTimeFromUtc(this string s)
     {
         string dayOfWeek = s.Substring(0, 3).Trim();
         string month = s.Substring(4, 3).Trim();
@@ -428,6 +451,103 @@ public static class BaseUtility
         string year = s.Substring(25, 5).Trim();
         string dateTime = String.Format("{0}-{1}-{2} {3}", dayInMonth, month, year, time);
         return DateTime.Parse(dateTime);
+    }
+
+    /// <summary>Parse RFC 822 (commonly used for RSS) string to System.DateTime.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static DateTime ToDateTimeFromRfc822(this string s)
+    {
+        DateTime dt;
+        int pos = s.LastIndexOf(" ");
+        try {
+            dt = Convert.ToDateTime(s);
+            if(s.Substring(pos + 1) == "Z") {
+                dt = dt.ToUniversalTime();
+            } else if(s.Substring(pos + 1) == "GMT") {
+                dt = dt.ToUniversalTime();
+            }
+            return dt;
+        } catch(System.Exception ex) { 
+            System.Diagnostics.Trace.WriteLine(ex.Message);
+        }
+        // Do alternative.
+        dt = Convert.ToDateTime(s.Substring(0, pos));
+        if (s[pos + 1] == '+') {
+            int h = Convert.ToInt32(s.Substring(pos + 2, 2));
+            dt = dt.AddHours(-h);
+            int m = Convert.ToInt32(s.Substring(pos + 4, 2));
+            dt = dt.AddMinutes(-m);
+        } else if(s[pos + 1] == '-') {
+            int h = Convert.ToInt32(s.Substring(pos + 2, 2));
+            dt = dt.AddHours(h);
+            int m = Convert.ToInt32(s.Substring(pos + 4, 2));
+            dt = dt.AddMinutes(m);
+        } else if(s.Substring(pos + 1) == "A") {
+            dt = dt.AddHours(1);
+        } else if(s.Substring(pos + 1) == "B") {
+            dt = dt.AddHours(2);
+        } else if(s.Substring(pos + 1) == "C") {
+            dt = dt.AddHours(3);
+        } else if(s.Substring(pos + 1) == "D") {
+            dt = dt.AddHours(4);
+        } else if(s.Substring(pos + 1) == "E") {
+            dt = dt.AddHours(5);
+        } else if(s.Substring(pos + 1) == "F") {
+            dt = dt.AddHours(6);
+        } else if(s.Substring(pos + 1) == "G") {
+            dt = dt.AddHours(7);
+        } else if(s.Substring(pos + 1) == "H") {
+            dt = dt.AddHours(8);
+        } else if(s.Substring(pos + 1) == "I") {
+            dt = dt.AddHours(9);
+        } else if(s.Substring(pos + 1) == "K") {
+            dt = dt.AddHours(10);
+        } else if(s.Substring(pos + 1) == "L") {
+            dt = dt.AddHours(11);
+        } else if(s.Substring(pos + 1) == "M") {
+            dt = dt.AddHours(12);
+        } else if(s.Substring(pos + 1) == "N") {
+            dt = dt.AddHours(-1);
+        } else if(s.Substring(pos + 1) == "O") {
+            dt = dt.AddHours(-2);
+        } else if(s.Substring(pos + 1) == "P") {
+            dt = dt.AddHours(-3);
+        } else if(s.Substring(pos + 1) == "Q") {
+            dt = dt.AddHours(-4);
+        } else if(s.Substring(pos + 1) == "R") {
+            dt = dt.AddHours(-5);
+        } else if(s.Substring(pos + 1) == "S") {
+            dt = dt.AddHours(-6);
+        } else if(s.Substring(pos + 1) == "T") {
+            dt = dt.AddHours(-7);
+        } else if(s.Substring(pos + 1) == "U") {
+            dt = dt.AddHours(-8);
+        } else if(s.Substring(pos + 1) == "V") {
+            dt = dt.AddHours(-9);
+        } else if(s.Substring(pos + 1) == "W") {
+            dt = dt.AddHours(-10);
+        } else if(s.Substring(pos + 1) == "X") {
+            dt = dt.AddHours(-11);
+        } else if(s.Substring(pos + 1) == "Y") {
+            dt = dt.AddHours(-12);
+        } else if(s.Substring(pos + 1) == "EST") {
+            dt = dt.AddHours(5);
+        } else if(s.Substring(pos + 1) == "EDT") {
+            dt = dt.AddHours(4);
+        } else if(s.Substring(pos + 1) == "CST") {
+            dt = dt.AddHours(6);
+        } else if(s.Substring(pos + 1) == "CDT") {
+            dt = dt.AddHours(5);
+        } else if(s.Substring(pos + 1) == "MST") {
+            dt = dt.AddHours(7);
+        } else if(s.Substring(pos + 1) == "MDT") {
+            dt = dt.AddHours(6);
+        } else if(s.Substring(pos + 1) == "PST") {
+            dt = dt.AddHours(8);
+        } else if(s.Substring(pos + 1) == "PDT") {
+            dt = dt.AddHours(7);
+        }
+        return dt;
     }
 
     /// <summary>To GUID.</summary>
@@ -482,7 +602,7 @@ public static class BaseUtility
             .ReplaceDiacritics()
             .Replace("-", " ")
             .Replace("& ", String.Empty)
-            .StripSpecialCharacters()
+            .RemoveSpecialCharacters()
             .Replace(" ", "-");
     }
 
@@ -497,6 +617,17 @@ public static class BaseUtility
             }
         }
         return defaultValue;
+    }
+
+    /// <summary>Convert string (from request form) to type. If null, return default value.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static T ToTypeOrDefault<T>(this Object value, T defaultValue) where T : struct
+    {
+        if(!IsNullOrStringEmpty(value)) {
+            return (T)Convert.ChangeType(value, typeof(T));
+        } else {
+            return defaultValue;
+        }
     }
 
     /// <summary>Convert string (from request form) to type. If null, return default value.</summary>
