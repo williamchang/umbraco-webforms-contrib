@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-06-21
-    - Modified: 2011-08-31
+    - Modified: 2011-09-16
     .
 @note
     References:
@@ -33,6 +33,20 @@ public static class CmsHelper
 {
     /// <summary>Static constructor.</summary>
     static CmsHelper() {}
+
+    /// <summary>Get children from razor and lambda expressions using dynamic.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static IList<DynamicNode> GetChildren(this DynamicNode cmsItem)
+    {
+       return cmsItem != null ? cmsItem.GetChildrenAsList.Items : new List<DynamicNode>();
+    }
+
+    /// <summary>To list from razor and lambda expressions using dynamic.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static IList<DynamicNode> GetChildren(this DynamicNodeList cmsItems)
+    {
+       return cmsItems.Items;
+    }
 
     /// <summary>Get first ancestor. Optionally, include self.</summary>
     /// <remarks>Extension method.</remarks>
@@ -399,12 +413,12 @@ public static class CmsHelper
     }
 
     /// <summary>Order list by distance ascending.</summary>
-    public static IList<DynamicNode> OrderByDistance(IList<DynamicNode> cmsItems, double currentLatitude, double currentLogitude, string cmsLatitudePropertyAlias, string cmsLongitudePropertyAlias)
+    public static IList<DynamicNode> OrderByDistance(IList<DynamicNode> cmsItems, double currentLatitude, double currentLongitude, string cmsLatitudePropertyAlias, string cmsLongitudePropertyAlias)
     {
         IDictionary<DynamicNode, double> pairItems = new Dictionary<DynamicNode, double>();
         int cmsItemsCount = cmsItems.Count;
         string propLatitude, propLongitude;
-        GeolocationUtility.LatLong pointCurrent = new GeolocationUtility.LatLong(currentLatitude, currentLogitude);
+        GeolocationUtility.LatLong pointCurrent = new GeolocationUtility.LatLong(currentLatitude, currentLongitude);
         GeolocationUtility.LatLong pointCompare;
 
         for(int i = 0;i < cmsItemsCount;i += 1) {
@@ -437,6 +451,13 @@ public static class CmsHelper
         return umbraco.library.RenderMacroContent(String.Format("<?UMBRACO_MACRO  macroAlias=\"{0}\" {1}/>", macroAlias, sb1.ToString()), cmsItemId);
     }
 
+    /// <summary>Returns a new string in which all occurrences of a specified string in the current instance are replaced with another specified string.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static string Replace(this string source, string targetValue, string newValue, string defaultValue)
+    {
+        return source.Replace(targetValue, BaseUtility.ToString(newValue, defaultValue));
+    }
+
     /// <summary>Replace escape '\n' (newline) and '\r' (carriage return) with text before and text after for Razor.</summary>
     public static System.Web.HtmlString ReplaceNewlines(string source, string textBefore, string textAfter)
     {
@@ -460,13 +481,6 @@ public static class CmsHelper
     public static System.Web.HtmlString ToHtmlRaw(Object value, string defaultValue)
     {
         return BaseUtility.ToString(value, defaultValue).ToHtmlRaw();
-    }
-    
-    /// <summary>To list from razor and lambda expressions using dynamic.</summary>
-    /// <remarks>Extension method.</remarks>
-    public static IList<DynamicNode> ToList(this DynamicNodeList cmsItems)
-    {
-       return cmsItems.Items;
     }
 
     /// <summary>To umbraco.interfaces.INode object.</summary>

@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2010-06-09
-    - Modified: 2011-09-13
+    - Modified: 2011-09-14
     .
 @note
     References:
@@ -411,7 +411,7 @@ public static class BaseUtility
     /// <remarks>Extension method.</remarks>
     public static string[] SplitClean(this string s, params char[] separator)
     {
-        return s.RemoveWhitespaces().Split(separator, StringSplitOptions.RemoveEmptyEntries);
+        return s.Split(separator, StringSplitOptions.RemoveEmptyEntries);
     }
 
     /// <summary>Split string to array by delimiter.</summary>
