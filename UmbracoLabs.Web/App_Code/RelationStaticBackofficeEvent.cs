@@ -1,13 +1,13 @@
 /**
 @file
-    LocationBackofficeEvent.cs
+    RelationStaticBackofficeEvent.cs
 @author
     William Chang
 @version
     0.1
 @date
     - Created: 2011-08-12
-    - Modified: 2011-08-18
+    - Modified: 2011-09-20
     .
 @note
     References:
@@ -32,7 +32,7 @@ namespace UmbracoLabs {
 
 /// <summary>Using document API and context menu API with Umbraco (CMS) backoffice events.</summary>
 /// <remarks>This class inherits from ApplicationBase and is therefore automatically instantiated on application_start.</remarks>
-public class LocationBackofficeEvent : ApplicationBase
+public class RelationStaticBackofficeEvent : ApplicationBase
 {
 
 #region Fields
@@ -45,7 +45,7 @@ public class LocationBackofficeEvent : ApplicationBase
 
     /// <summary>Default constructor.</summary>
     /// <remarks>All events are registered using this constructor.</remarks>
-    public LocationBackofficeEvent()
+    public RelationStaticBackofficeEvent()
     {
         // Subscribe event to context menu.
         BaseTree.BeforeNodeRender += new umbraco.cms.presentation.Trees.BaseTree.BeforeNodeRenderEventHandler(BaseTree_BeforeNodeRender);

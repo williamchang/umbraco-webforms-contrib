@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-06-21
-    - Modified: 2011-09-16
+    - Modified: 2011-09-20
     .
 @note
     References:
@@ -61,6 +61,27 @@ public static class CmsHelper
                 cmsItems = cmsItem.Ancestors(nodeTypeAlias).Items;
             }
             return cmsItems.Where(x => x.Name == pageName).FirstOrDefault();
+        }
+        return null;
+    }
+
+    /// <summary>Get first ancestor. Optionally, include self.</summary>
+    /// <remarks>Extension method.</remarks>
+    public static DynamicNode GetFirstAncestor(this DynamicNode cmsItem, string propertyAlias, bool includeSelf = false, string nodeTypeAlias = null)
+    {
+        if(includeSelf == false) {
+            cmsItem = cmsItem.Parent;
+        }
+        while(cmsItem != null) {
+            var value = cmsItem.GetPropertyValue(propertyAlias);
+            if(value != null) {
+                if(String.IsNullOrEmpty(nodeTypeAlias)) {
+                    return cmsItem;
+                } else if(BaseUtility.Equals(nodeTypeAlias, cmsItem.NodeTypeAlias)) {
+                    return cmsItem;
+                }
+            }
+            cmsItem = cmsItem.Parent;
         }
         return null;
     }
@@ -315,7 +336,7 @@ public static class CmsHelper
     /// <remarks>Extension method.</remarks>
     public static DynamicNode GetRelationItem(this DynamicNode cmsRelationItem, DynamicNode cmsParentItem)
     {
-        return GetRelationItem(cmsRelationItem.GetPropertyValue(LocationBackofficeEvent.PROPERTYALIAS__RelationStaticId), cmsRelationItem.NodeTypeAlias, cmsParentItem);
+        return GetRelationItem(cmsRelationItem.GetPropertyValue(RelationStaticBackofficeEvent.PROPERTYALIAS__RelationStaticId), cmsRelationItem.NodeTypeAlias, cmsParentItem);
     }
 
     /// <summary>Get relation item from parent by property, relation static id.</summary>
@@ -326,7 +347,7 @@ public static class CmsHelper
             var cmsDescendantsCount = cmsDescendants.Count;
 
             for(int i = 0;i < cmsDescendantsCount;i += 1) {
-                if(String.Equals(cmsDescendants[i].GetPropertyValue(LocationBackofficeEvent.PROPERTYALIAS__RelationStaticId), relationStaticId)) {
+                if(String.Equals(cmsDescendants[i].GetPropertyValue(RelationStaticBackofficeEvent.PROPERTYALIAS__RelationStaticId), relationStaticId)) {
                     return cmsDescendants[i];
                 }
             }
@@ -338,7 +359,7 @@ public static class CmsHelper
     /// <remarks>Extension method.</remarks>
     public static IList<DynamicNode> GetRelationItems(this DynamicNode cmsRelationItem, DynamicNode cmsParentItem)
     {
-        return GetRelationItems(cmsRelationItem.GetPropertyValue(LocationBackofficeEvent.PROPERTYALIAS__RelationStaticId), cmsRelationItem.NodeTypeAlias, cmsParentItem);
+        return GetRelationItems(cmsRelationItem.GetPropertyValue(RelationStaticBackofficeEvent.PROPERTYALIAS__RelationStaticId), cmsRelationItem.NodeTypeAlias, cmsParentItem);
     }
 
     /// <summary>Get relation items from parent by property, relation static id.</summary>
@@ -351,7 +372,7 @@ public static class CmsHelper
             var cmsDescendantsCount = cmsDescendants.Count;
 
             for(int i = 0;i < cmsDescendantsCount;i += 1) {
-                if(String.Equals(cmsDescendants[i].GetPropertyValue(LocationBackofficeEvent.PROPERTYALIAS__RelationStaticId), relationStaticId)) {
+                if(String.Equals(cmsDescendants[i].GetPropertyValue(RelationStaticBackofficeEvent.PROPERTYALIAS__RelationStaticId), relationStaticId)) {
                     cmsItems.Add(cmsDescendants[i]);
                 }
             }
