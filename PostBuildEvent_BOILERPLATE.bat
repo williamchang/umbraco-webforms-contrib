@@ -1,7 +1,7 @@
 @echo off
 
 :: Microsoft Visual Studio
-:: Post-build event command line: call "$(SolutionDir)\PostBuildEvent.bat" "$(ProjectDir)" "$(TargetName)"
+:: Post-build event command line: call "$(SolutionDir)PostBuildEvent.bat" "$(ProjectDir)" "$(TargetName)"
 
 :: Created by William Chang
 :: Email: william@creativecrew.org
@@ -32,7 +32,7 @@ echo.
 :: END Debug
 
 :: Run program.
-xcopy /y "%ProjectDir%\bin\$(TargetName).*" "C:\inetpub\wwwroot_sandbox_umbraco1\bin"
+xcopy /y "%ProjectDir%\bin\%TargetName%.*" "C:\inetpub\wwwroot_sandbox_umbraco1\bin"
 xcopy /y "%ProjectDir%\masterpages\*.master" "C:\inetpub\wwwroot_sandbox_umbraco1\masterpages"
 xcopy /y "%ProjectDir%\usercontrols\*.ascx" "C:\inetpub\wwwroot_sandbox_umbraco1\usercontrols"
 xcopy /y "%ProjectDir%\macroScripts\*.cshtml" "C:\Inetpub\wwwroot_sandbox_umbraco1\macroScripts"

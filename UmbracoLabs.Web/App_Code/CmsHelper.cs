@@ -7,7 +7,7 @@
     0.1
 @date
     - Created: 2011-06-21
-    - Modified: 2011-09-20
+    - Modified: 2011-10-07
     .
 @note
     References:
@@ -368,14 +368,7 @@ public static class CmsHelper
         IList<DynamicNode> cmsItems = new List<DynamicNode>();
 
         if(!String.IsNullOrEmpty(relationStaticId)) {
-            var cmsDescendants = cmsParentItem.DescendantsOrSelf(nodeTypeAlias).Items;
-            var cmsDescendantsCount = cmsDescendants.Count;
-
-            for(int i = 0;i < cmsDescendantsCount;i += 1) {
-                if(String.Equals(cmsDescendants[i].GetPropertyValue(RelationStaticBackofficeEvent.PROPERTYALIAS__RelationStaticId), relationStaticId)) {
-                    cmsItems.Add(cmsDescendants[i]);
-                }
-            }
+            return cmsParentItem.DescendantsOrSelf(x => String.Equals(x.NodeTypeAlias, nodeTypeAlias) && String.Equals(x.GetPropertyValue(RelationStaticBackofficeEvent.PROPERTYALIAS__RelationStaticId), relationStaticId)).Items;
         }
         return cmsItems;
     }
