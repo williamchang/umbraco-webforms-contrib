@@ -100,7 +100,9 @@
     <Compile Include="App_Code\CmsDocumentHelper.cs" />
     <Compile Include="App_Code\CmsHelper.cs" />
     <Compile Include="App_Code\CmsHttpModule.cs" />
+    <Compile Include="App_Code\WebContext.cs" />
     <Compile Include="App_Code\GeolocationUtility.cs" />
+    <Compile Include="App_Code\PageCmsEvent.cs" />
     <Compile Include="App_Code\RelationStaticBackofficeEvent.cs" />
     <Compile Include="App_Code\RenderRazor.cs" />
     <Compile Include="App_Code\SecurityHelper.cs" />
